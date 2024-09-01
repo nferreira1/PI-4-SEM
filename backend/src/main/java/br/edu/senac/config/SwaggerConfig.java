@@ -12,8 +12,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public OpenAPI swagger() {
         return new OpenAPI()
-                .info(new Info().title("SysClub API")
+                .info(new Info().title("TechCommerce API")
                         .version("1.0")
-                        .description("API para o sistema de agendamentos SysClub."));
+                        .description("API para o sistema de e-commerce TechCommerce."));
     }
 }

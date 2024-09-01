@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 
 @Tag(name = "Cliente")
 @RequestMapping("/cliente")
@@ -21,17 +20,17 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Cliente> addCliente(@RequestBody @Valid Cliente obj) {
+    public ResponseEntity<Cliente> criar(@RequestBody @Valid Cliente obj) {
 
         Cliente cliente = this.clienteService.criar(obj);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(cliente.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Cliente>> findById(@PathVariable Long id) {
+    public ResponseEntity<Cliente> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(this.clienteService.findById(id));
     }
 

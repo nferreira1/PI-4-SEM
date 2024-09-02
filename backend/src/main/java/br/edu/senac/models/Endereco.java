@@ -1,7 +1,10 @@
 package br.edu.senac.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +27,9 @@ public class Endereco {
     private String logradouro;
 
     @Column(nullable = false)
-    @NotBlank(message = "O número do endereço não pode ser nulo e nem vazio.")
-    private String numero;
+    @NotNull(message = "O número do endereço não pode ser nulo.")
+    @Min(value = 1, message = "O número do endereço deve ser maior do que zero.")
+    private int numero;
 
     @Column(nullable = true)
     private String complemento;
@@ -44,10 +48,11 @@ public class Endereco {
 
     @Column(nullable = false)
     @NotBlank(message = "O estado não pode ser nulo e nem vazio.")
-    private String estado;
+    @Size(min = 2, max = 2, message = "O estado deve ter no mínimo e no máximo 2 caracteres")
+    private String UF;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
 }

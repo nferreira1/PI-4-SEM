@@ -1,9 +1,11 @@
 package br.edu.senac.controllers;
 
+import br.edu.senac.DTO.ClienteDTO;
 import br.edu.senac.models.Cliente;
 import br.edu.senac.services.ClienteService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,22 +19,21 @@ import java.net.URI;
 public class ClienteController {
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Cliente> criar(@RequestBody @Valid Cliente obj) {
-
-        Cliente cliente = this.clienteService.criar(obj);
-
+    public ResponseEntity<ClienteDTO> createUser(@RequestBody @Valid ClienteDTO clienteDTO) {
+        var cliente = modelMapper.map(clienteDTO, Cliente.class);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
-
-        return ResponseEntity.created(uri).build();
+        this.clienteService.criar(cliente);
+        return ResponseEntity.created(uri).body(modelMapper.map(cliente, ClienteDTO.class));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(this.clienteService.findById(id));
+    public ResponseEntity<ClienteDTO> findById(@PathVariable @Valid Long id) {
+        return ResponseEntity.ok().body(modelMapper.map(this.clienteService.findById(id), ClienteDTO.class));
     }
-
-
 }

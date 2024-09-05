@@ -1,8 +1,14 @@
 package br.edu.senac.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "produtos")
 @Entity(name = "Produto")
@@ -10,8 +16,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-class Produto {
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,20 +27,32 @@ class Produto {
     private String nome;
 
     @Column(nullable = false)
-    @NotBlank(message = "A descrição do produto não pode ser nulo e nem vazia")
+    @NotBlank(message = "A descrição do produto não pode ser nulo e nem vazia.")
     private String descricao;
 
     @Column(nullable = false)
-    @NotBlank(message = "A quantidade do produto não pode ser nulo e nem vazio")
-    private int quantidade;
+    @PositiveOrZero(message = "O estoque deve ser maior ou igual a zero.")
+    private int estoque;
 
     @Column(nullable = false)
-    @NotBlank(message = "O preço do produto não pode ser nulo e nem vazio")
-    private double preco;
+    @Positive(message = "O valor deve ser positivo.")
+    @DecimalMin(value = "1.00", message = "O valor deve ser no mínimo R$ 1,00.")
+    private double valor;
 
     @Column(nullable = false)
-    @NotBlank(message = "A categoria do produto não pode ser nulo e nem vazio")
-    private String categoria;
+    @NotNull(message = "O status do produto não pode ser nulo.")
+    private Boolean status = true;
 
+    @Column(nullable = false, columnDefinition = "BYTEA")
+    @Lob
+    @NotNull(message = "A imagem do produto não pode ser nula.")
+    private byte[] imagem;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    private List<PedidoItens> pedidoItens = new ArrayList<PedidoItens>();
 
 }

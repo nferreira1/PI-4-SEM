@@ -8,31 +8,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "compras")
-@Entity(name = "Compra")
+@Table(name = "pedidos")
+@Entity(name = "Pedido")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Compra {
+public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private LocalDateTime dataCompra;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id", nullable = false) // Essa compra vai ter obrigatoriamente um ID do cliente
+    @JoinColumn(name = "cliente_id", nullable = false)
     @NotNull(message = "O ID do cliente não pode ser nulo.")
     private Cliente cliente;
 
-    @Column(nullable = false)
-    @ManyToMany
-    @JoinTable(name = "compras_produtos", joinColumns = @JoinColumn(name = "compra_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "produto_id", nullable = false))
-    private List<Produto> produtos;
-
-    @Column(nullable = false)
-    private LocalDateTime dataCompra;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<PedidoItens> pedidosItens = new ArrayList<PedidoItens>() ;
 
 }

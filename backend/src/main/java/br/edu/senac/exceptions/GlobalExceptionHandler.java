@@ -35,8 +35,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildErrorResponse(errorResponse);
     }
 
-    //    COLOCAR EM PRODUÇÃO
-//    @ExceptionHandler(Exception.class)
+//    // COLOCAR EM PRODUÇÃO
+//    @ExceptionHandler(Throwable.class)
 //    protected ResponseEntity<Object> handleException(ErrorResponseException ex) {
 //        return buildErrorResponse(ex);
 //    }

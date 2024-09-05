@@ -1,11 +1,11 @@
 package br.edu.senac.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Cliente {
 
     @Id
@@ -39,6 +38,7 @@ public class Cliente {
     private String cpf;
 
     @Column(nullable = false)
+    @NotNull(message = "O status do cliente não pode ser nulo.")
     private Boolean status = true;
 
     @Column(nullable = false)
@@ -46,9 +46,9 @@ public class Cliente {
     private String telefone;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Endereco> endereco = new ArrayList<Endereco>();
+    private List<Endereco> enderecos = new ArrayList<Endereco>();
 
     @OneToMany(mappedBy = "cliente")
-    private List<Compra> compra = new ArrayList<Compra>();
+    private List<Pedido> pedidos = new ArrayList<Pedido>();
 
 }

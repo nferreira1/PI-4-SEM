@@ -26,8 +26,8 @@ public class ClienteService {
     public Cliente criar(@NonNull Cliente cliente) {
         Cliente clienteSalvo = this.clienteRepository.save(cliente);
 
-        if (!cliente.getEndereco().isEmpty()) {
-            cliente.getEndereco().forEach(endereco -> {
+        if (!cliente.getEnderecos().isEmpty()) {
+            cliente.getEnderecos().forEach(endereco -> {
                 endereco.setCliente(clienteSalvo);
                 this.enderecoService.criar(endereco);
             });

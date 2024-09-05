@@ -48,7 +48,7 @@ public class Endereco {
 
     @Column(nullable = false)
     @NotBlank(message = "O estado não pode ser nulo e nem vazio.")
-    @Size(min = 2, max = 2, message = "O estado deve ter no mínimo e no máximo 2 caracteres")
+    @Size(min = 2, max = 2, message = "O estado deve ter no mínimo e no máximo 2 caracteres.")
     private String UF;
 
     @ManyToOne(fetch = FetchType.LAZY)

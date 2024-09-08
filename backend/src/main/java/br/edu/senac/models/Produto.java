@@ -41,7 +41,7 @@ public class Produto {
 
     @Column(nullable = false)
     @NotNull(message = "O status do produto não pode ser nulo.")
-    private Boolean status = true;
+    private boolean status = true;
 
     @Column(nullable = false, columnDefinition = "BYTEA")
     @Lob

@@ -3,6 +3,7 @@ package br.edu.senac.exceptions;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildErrorResponse(errorResponse);
     }
 
+    //FIXME Precisamos descobrir uma forma de retornar qual tipo de valor ta duplicado
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    protected  ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
+//        ErrorResponseException errorResponseException = new ErrorResponseException(HttpStatus.CONFLICT, ex.);
+//
+//    }
 //    // COLOCAR EM PRODUÇÃO
 //    @ExceptionHandler(Throwable.class)
 //    protected ResponseEntity<Object> handleException(ErrorResponseException ex) {

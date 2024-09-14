@@ -1,7 +1,7 @@
 package br.edu.senac.DTO;
 
 
-import br.edu.senac.Enum.TipoPagamento;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ public class PagamentoDTO {
 
     private Long id;
     private Double valor;
-    private TipoPagamento tipoPagamento;
+    private int tipoPagamento;
 }

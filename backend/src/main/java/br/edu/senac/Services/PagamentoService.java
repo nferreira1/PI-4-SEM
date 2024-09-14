@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PagamentoService  implements IServicePattern<PagamentoEntity> {
+public class PagamentoService implements IServicePattern<PagamentoEntity> {
 
     @Autowired
     private PagamentoRepository pagamentoRepository;//injeção de dependencia
@@ -19,7 +19,7 @@ public class PagamentoService  implements IServicePattern<PagamentoEntity> {
 
     @Override
     public List<PagamentoEntity> GetAll() {
-        return List.of();
+        return pagamentoRepository.findAll();
     }
 
     @Override

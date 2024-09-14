@@ -16,8 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@Tag(name = "Cliente")
-@RequestMapping("/cliente")
+@Tag(name = "Pagamento")
+@RequestMapping("/pagamento")
 @RestController
 public class PagamentoController {
 

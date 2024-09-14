@@ -1,6 +1,7 @@
 package br.edu.senac.Entity;
 
-import br.edu.senac.Enum.TipoPagamento;
+import br.edu.senac.Enum.StatusPagamento;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,8 +39,8 @@ public class PagamentoEntity {
 
     private int statusPagamento;
 
-    private TipoPagamento getTipoPagamento(int statusPagamento)
+    private StatusPagamento getTipoPagamento(int statusPagamento)
     {
-        return TipoPagamento.valueOf(statusPagamento);
+        return StatusPagamento.valueOf(statusPagamento);
     }
 }

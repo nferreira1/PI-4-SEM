@@ -4,12 +4,11 @@ import br.edu.senac.Entity.CategoriaEntity;
 
 import java.util.List;
 
-public interface IServicePattern<T, U>
+public interface IServicePattern<T>
 {
-
     List<T> GetAll();
-    T GetId(U id);
-    T Post(U id, T object);
-    T Update(U id, T object);
-    void  Delete(U id);
+    T GetId(Long id);
+    T Post(Long id, T object);
+    T Update(Long id, T object);
+    void  Delete(Long id);
 }

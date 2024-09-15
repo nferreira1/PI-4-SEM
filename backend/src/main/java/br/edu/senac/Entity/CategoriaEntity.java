@@ -33,6 +33,10 @@ public class CategoriaEntity {
     @NotNull(message = "O status da categoria não pode ser nulo.")
     private Boolean status = true;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
+    @NotNull(message = "A imagem do produto não pode ser nula.")
+    private String imagem;
+
     @Column(nullable = false)
     @OneToMany(mappedBy = "categoriaEntity")
     private List<ProdutoEntity> produtoEntity = new ArrayList<ProdutoEntity>();

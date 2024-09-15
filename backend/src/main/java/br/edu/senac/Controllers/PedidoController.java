@@ -1,7 +1,5 @@
 package br.edu.senac.Controllers;
 
-import br.edu.senac.DTO.CategoriaDTO;
-import br.edu.senac.Entity.CategoriaEntity;
 import br.edu.senac.Entity.PedidoEntity;
 import br.edu.senac.Pattern.IControllerPattern;
 import br.edu.senac.Services.CategoriaService;
@@ -10,18 +8,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "Pedido")
 @RequestMapping("/pedido")
 @RestController
-public class PedidoController implements IControllerPattern<PedidoEntity> {
+public class PedidoController implements IControllerPattern<PedidoEntity, Long> {
 
     @Autowired
     private ModelMapper modelMapper;
@@ -32,25 +27,25 @@ public class PedidoController implements IControllerPattern<PedidoEntity> {
     @Autowired
     private PagamentoService pagamentoService;
 
-
     @Override
-    public ResponseEntity<PedidoEntity> findAll() {
+    public ResponseEntity<List<PedidoEntity>> getAll() {
         return null;
     }
 
     @Override
-    public ResponseEntity<PedidoEntity> findById(int id) {
+    public ResponseEntity<PedidoEntity> getById(Long id) {
         return null;
     }
 
     @Override
-    public ResponseEntity<PedidoEntity> Insert(PedidoEntity object) {
+    public ResponseEntity<PedidoEntity> post(PedidoEntity object) {
         return null;
     }
 
     @Override
-    public ResponseEntity<PedidoEntity> Update(int id, PedidoEntity object) {
+    public ResponseEntity<PedidoEntity> put(Long id, PedidoEntity object) {
         return null;
     }
+
 }
 

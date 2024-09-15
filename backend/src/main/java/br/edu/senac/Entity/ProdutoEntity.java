@@ -43,10 +43,8 @@ public class ProdutoEntity {
     @NotNull(message = "O status do produto não pode ser nulo.")
     private boolean status = true;
 
-    @Column(nullable = false, columnDefinition = "BYTEA")
-    @Lob
-    @NotNull(message = "A imagem do produto não pode ser nula.")
-    private byte[] imagem;
+    @Column(nullable = false)
+    private String imagem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)

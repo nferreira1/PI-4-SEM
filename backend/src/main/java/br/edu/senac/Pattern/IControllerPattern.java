@@ -1,15 +1,17 @@
 package br.edu.senac.Pattern;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
-public interface IControllerPattern<T> {
+public interface IControllerPattern<T, U> {
 
-      ResponseEntity<T> findAll();
-      ResponseEntity<T> findById(int id);
-      ResponseEntity<T> Insert(T object);
-      ResponseEntity<T> Update(int id,T object);
+    ResponseEntity<List<T>> getAll();
+
+    ResponseEntity<T> getById(U id);
+
+    ResponseEntity<T> post(T object);
+
+    ResponseEntity<T> put(U id, T object);
 }

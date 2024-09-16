@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,4 +19,6 @@ public class ProdutoDTO {
     private int estoque;
     private double valor;
     private boolean status;
+    private List<ProdutoImagensDTO> imagens;
+
 }

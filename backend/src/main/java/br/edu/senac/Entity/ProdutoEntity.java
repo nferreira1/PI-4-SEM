@@ -43,14 +43,14 @@ public class ProdutoEntity {
     @NotNull(message = "O status do produto não pode ser nulo.")
     private boolean status = true;
 
-    @Column(nullable = false)
-    private String imagem;
+    @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProdutoImagensEntity> produtoImagensEntities = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaEntity categoriaEntity;
 
     @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL)
-    private List<PedidoItensEntity> pedidoItenEntities = new ArrayList<PedidoItensEntity>();
+    private List<PedidoItensEntity> pedidoItensEntities = new ArrayList<PedidoItensEntity>();
 
 }

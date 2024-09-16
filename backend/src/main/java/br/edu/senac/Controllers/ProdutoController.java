@@ -35,16 +35,17 @@ public class ProdutoController implements IControllerPattern<ProdutoDTO, Long> {
         return ResponseEntity.ok().body(produtoDTOS);
     }
 
-    @GetMapping("/{categoriaId}")
+    @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<ProdutoDTO>> getByCategoriaEntityId(@PathVariable Long categoriaId) {
         List<ProdutoEntity> produtoEntities = this.produtoService.findByCategoriaEntityId(categoriaId);
         List<ProdutoDTO> produtoDTOS = produtoEntities.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class)).toList();
         return ResponseEntity.ok().body(produtoDTOS);
     }
 
+    @GetMapping("/{id}")
     @Override
-    public ResponseEntity<ProdutoDTO> getById(Long id) {
-        return null;
+    public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(modelMapper.map(this.produtoService.findById(id), ProdutoDTO.class));
     }
 
     @Override

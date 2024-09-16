@@ -1,9 +1,11 @@
 package br.edu.senac.Services;
 
 import br.edu.senac.Entity.ProdutoEntity;
+import br.edu.senac.Exceptions.ErrorResponseException;
 import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +31,9 @@ public class ProdutoService implements IServicePattern<ProdutoEntity, Long> {
 
     @Override
     public ProdutoEntity findById(Long id) {
-        return null;
+        return this.produtoRepository.findById(id).orElseThrow(
+                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Produto não encontrado.")
+        );
     }
 
     @Override

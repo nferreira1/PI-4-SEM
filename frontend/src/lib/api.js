@@ -1,8 +1,8 @@
 export const api = {
     async request(method, url, options = {}) {
-        let data = null;
-        let response = null;
-        let error = null;
+        let data = undefined;
+        let response = undefined;
+        let error = undefined;
         let loading = true;
 
         if (options.body && typeof options.body === "object") {
@@ -19,15 +19,21 @@ export const api = {
                 method
             });
 
-            data = await response.json();
-            error = undefined;
+            if (!response.ok) {
+                error = await response.json();
+                data = undefined;
+            } else {
+                data = await response.json();
+                error = undefined;
+            }
         } catch (err) {
             data = undefined;
-            error = err || "Erro desconhecido.";
+            error = err;
         } finally {
-            loading = false;
+            loading = false; // Garante que o loading seja atualizado para false aqui
         }
 
+        // Retorna o estado completo após a execução completa (success, error ou finalmente)
         return {data, response, error, loading};
     },
 

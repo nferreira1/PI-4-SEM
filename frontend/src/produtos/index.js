@@ -9,16 +9,6 @@ const produtoValor = document.getElementById("produtoValor");
 const descricaoProduto = document.getElementById("descricaoProduto");
 const produtosRecomendados = document.getElementById("produtosRecomendados");
 
-const handleFetchProduto = async (id) => {
-    const {data, error, response, loading} = await api.GET(`/produto/${id}`);
-    return {data, error, response, loading};
-};
-
-const handleFetchProdutos = async () => {
-    const {data, error, response, loading} = await api.GET(`/produto`);
-    return {data, error, response, loading};
-};
-
 const handleSelecionarImagemProduto = (imagem, button) => {
     if (buttonSelecionado) {
         buttonSelecionado.classList.remove("border", "border-primary");
@@ -46,28 +36,37 @@ const adicionarEventosDeCliqueNasImagens = (imagens) => {
     });
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async (e) => {
     const params = new URLSearchParams(window.location.search);
     const produtoId = params.get("produtoId");
 
-    const {data} = await handleFetchProduto(produtoId);
-    const {data: produtos} = await handleFetchProdutos();
+    const [
+        {data: produto, error: errorProduto},
+        {data: produtos, error: errorProdutos}
+    ] = await Promise.all([
+        await api.GET(`/produto/${produtoId}`),
+        await api.GET(`/produto`)
+    ]);
 
-    imagemSelecionada = data.imagens.find(imagem => imagem.imagemPrincipal)?.id;
-    imagemPrincipal.src = data.imagens.find(imagem => imagem.imagemPrincipal)?.imagem || "";
-    imagemPrincipal.alt = data.nome;
+    if (errorProduto) {
+        window.history.back();
+    }
 
-    divImagens.innerHTML = data.imagens.map(imagem => `
+    imagemSelecionada = produto.imagens.find(imagem => imagem.imagemPrincipal)?.id;
+    imagemPrincipal.src = produto.imagens.find(imagem => imagem.imagemPrincipal)?.imagem || "";
+    imagemPrincipal.alt = produto.nome;
+
+    divImagens.innerHTML = produto.imagens.map(imagem => `
         <button class="h-20 bg-muted aspect-square rounded-lg flex items-center justify-center cursor-pointer">
-            <img src=${imagem.imagem} alt=${data.nome} class="size-14 object-cover pointer-events-none">
+            <img src=${imagem.imagem} alt=${produto.nome} class="size-14 object-cover pointer-events-none">
         </button>
     `).join("");
 
-    adicionarEventosDeCliqueNasImagens(data.imagens);
+    adicionarEventosDeCliqueNasImagens(produto.imagens);
 
-    nomeProduto.textContent = data.nome;
-    produtoValor.textContent = Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(data.valor);
-    descricaoProduto.textContent = data.descricao;
+    nomeProduto.textContent = produto.nome;
+    produtoValor.textContent = Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(produto.valor);
+    descricaoProduto.textContent = produto.descricao;
 
     produtosRecomendados.innerHTML = produtos.map(produto => {
         const imagemPrincipal = produto.imagens.find(imagem => imagem.imagemPrincipal);

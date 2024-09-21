@@ -12,13 +12,13 @@ export function produtosRecomendados(section, data) {
                      stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="15"
                      xmlns="http://www.w3.org/2000/svg"
                     >
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    <polygon points="12  2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                 </svg>
             `;
         }
 
         return `
-            <a href="/produtos/?produtoId=${produto.id}">
+            <a href="/produtos/?produtoId=${produto.id}" class="inline-block">
                 <div class="w-40 lg:w-44 h-52 lg:h-60 flex flex-col">
                     <div class="relative flex items-center justify-center grow bg-muted rounded-md">
                         <div class="absolute top-1.5  left-1.5  flex items-center rounded-2xl bg-primary px-2 py-1.5 gap-1">
@@ -55,7 +55,7 @@ export function produtosRecomendados(section, data) {
                                 >
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                             </svg>
-                            <span class="text-xs lg:text-sm ml-1">(25)</span>
+                            <span class="text-xs lg:text-sm text-muted-foreground ml-1">(25)</span>
                         </div>  
                     </div>
                 </div>

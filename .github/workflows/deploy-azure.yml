@@ -22,7 +22,7 @@ jobs:
       - name: Transferir a imagem do backend para a VM
         uses: appleboy/ssh-action@master
         with:
-          hostname: ${{ secrets.VM_IP }}
+          host: ${{ secrets.VM_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
@@ -35,7 +35,7 @@ jobs:
       - name: Parar, remover e rodar o backend
         uses: appleboy/ssh-action@master
         with:
-          hostname: ${{ secrets.VM_IP }}
+          host: ${{ secrets.VM_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
@@ -62,7 +62,7 @@ jobs:
       - name: Transferir a imagem do frontend para a VM
         uses: appleboy/ssh-action@master
         with:
-          hostname: ${{ secrets.VM_IP }}
+          host: ${{ secrets.VM_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
@@ -75,7 +75,7 @@ jobs:
       - name: Parar, remover e rodar o frontend
         uses: appleboy/ssh-action@master
         with:
-          hostname: ${{ secrets.VM_IP }}
+          host: ${{ secrets.VM_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22

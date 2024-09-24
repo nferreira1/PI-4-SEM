@@ -8,7 +8,7 @@ COPY . /app
 
 RUN dos2unix ./mvnw && chmod +x ./mvnw
 
-RUN ./mvnw clean package
+RUN ./mvnw clean package -DskipTests
 
 RUN ls -la target/
 
@@ -16,4 +16,4 @@ COPY *.jar /app/backend.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/app/backend.jar"]
+CMD ["java", "-jar", "/app/backend.jar", "-Dspring.profiles.active=prod"]

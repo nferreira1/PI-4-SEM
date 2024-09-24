@@ -1,0 +1,71 @@
+name: Deploy do frontend e backend na VM da Azure
+
+on:
+  release:
+    types: [published]  # Executa o deploy quando lançar uma nova versão
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # ----- Buildar, Transferir e Deploy do Backend -----
+      - name: Buildar a imagem do backend
+        run: docker build -t backend-image ./backend
+
+      - name: Salvar a imagem do backend
+        run: docker save backend-image | gzip > backend-image.tar.gz
+
+      - name: Transferir a imagem do backend para a VM
+        run: |
+          echo "${{ secrets.SSH_PASSWORD }}" | ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} "cat > ~/images/backend-image.tar.gz"
+
+      - name: Parar e remover o backend antigo, se existir
+        run: |
+          echo "${{ secrets.SSH_PASSWORD }}" | ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} "
+            docker stop backend-container || true &&
+            docker rm backend-container || true &&
+            docker rmi backend-image || true
+          "
+
+      - name: Carregar e rodar a nova imagem do backend
+        run: |
+          echo "${{ secrets.SSH_PASSWORD }}" | ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} "
+            docker load -i ~/images/backend-image.tar.gz &&
+            docker run -d -p 8080:8080 -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} --name backend-container backend-image
+          "
+
+      # ----- Buildar, Transferir e Deploy do Frontend -----
+      - name: Buildar a imagem do frontend
+        run: docker build -t frontend-image ./frontend
+
+      - name: Salvar a imagem do frontend
+        run: docker save frontend-image | gzip > frontend-image.tar.gz
+
+      - name: Transferir a imagem do frontend para a VM
+        run: |
+          echo "${{ secrets.SSH_PASSWORD }}" | ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} "cat > ~/images/frontend-image.tar.gz"
+
+      - name: Parar e remover o frontend antigo, se existir
+        run: |
+          echo "${{ secrets.SSH_PASSWORD }}" | ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} "
+            docker stop frontend-container || true &&
+            docker rm frontend-container || true &&
+            docker rmi frontend-image || true
+          "
+
+      - name: Carregar e rodar a nova imagem do frontend
+        run: |
+          echo "${{ secrets.SSH_PASSWORD }}" | ssh -o StrictHostKeyChecking=no \
+          ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} "
+            docker load -i ~/images/frontend-image.tar.gz &&
+            docker run -d -p 3000:3000 -e VITE_API_URL=${{ secrets.VITE_API_URL }} --name frontend-container frontend-image
+          "

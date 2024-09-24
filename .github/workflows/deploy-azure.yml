@@ -20,17 +20,14 @@ jobs:
         run: docker save backend-image | gzip > backend-image.tar.gz
 
       - name: Transferir a imagem do backend para a VM
-        uses: appleboy/ssh-action@master
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VM_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
-          script: |
-            "
-              mkdir -p ~/images/ &&
-              cat > ~/images/backend-image.tar.gz
-            "
+          source: "backend-image.tar.gz"
+          target: "~/images/"
 
       - name: Parar, remover e rodar o backend
         uses: appleboy/ssh-action@master
@@ -40,17 +37,15 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            "
-              docker stop backend-container || true &&
-              docker rm backend-container || true &&
-              docker rmi backend-image || true &&
-              docker load -i ~/images/backend-image.tar.gz &&
-              docker run -d -p 8080:8080 \
-                -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
-                -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
-                -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
-                --name backend-container backend-image
-            "
+            docker stop backend-container || true &&
+            docker rm backend-container || true &&
+            docker rmi backend-image || true &&
+            docker load -i ~/images/backend-image.tar.gz &&
+            docker run -d -p 8080:8080 \
+              -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
+              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
+              -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
+              --name backend-container backend-image
 
       # ----- Buildar, Transferir e Deploy do Frontend -----
       - name: Buildar a imagem do frontend
@@ -60,17 +55,14 @@ jobs:
         run: docker save frontend-image | gzip > frontend-image.tar.gz
 
       - name: Transferir a imagem do frontend para a VM
-        uses: appleboy/ssh-action@master
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VM_IP }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
-          script: |
-            "
-              mkdir -p ~/images/ &&
-              cat > ~/images/frontend-image.tar.gz
-            "
+          source: "frontend-image.tar.gz"
+          target: "~/images/"
 
       - name: Parar, remover e rodar o frontend
         uses: appleboy/ssh-action@master
@@ -80,12 +72,10 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            "
-              docker stop frontend-container || true &&
-              docker rm frontend-container || true &&
-              docker rmi frontend-image || true &&
-              docker load -i ~/images/frontend-image.tar.gz &&
-              docker run -d -p 3000:3000 \
-                -e VITE_API_URL=${{ secrets.VITE_API_URL }} \
-                --name frontend-container frontend-image
-            "
+            docker stop frontend-container || true &&
+            docker rm frontend-container || true &&
+            docker rmi frontend-image || true &&
+            docker load -i ~/images/frontend-image.tar.gz &&
+            docker run -d -p 3000:3000 \
+              -e VITE_API_URL=${{ secrets.VITE_API_URL }} \
+              --name frontend-container frontend-image

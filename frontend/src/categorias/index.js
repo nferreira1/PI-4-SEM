@@ -20,7 +20,7 @@ const handleFetchCategorias = async () => {
         sectionCategorias.innerHTML = data.map(categoria => `
             <a href="/categorias/produtos?categoriaId=${categoria.id}">
                 <div class="w-40 lg:w-96 h-48 lg:h-64 flex flex-col rounded-md overflow-hidden cursor-pointer">
-                    <div class="grow flex items-center justify-center bg-gradient-to-tr from-primary to-primary/30">
+                    <div class="grow flex items-center justify-center bg-gradient-to-r from-primary to-primary/30">
                         <img alt={categoria.nome} src=${categoria.imagem} class="object-contain size-32 lg:size-40">
                     </div>
                 
@@ -34,6 +34,5 @@ const handleFetchCategorias = async () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-
     handleFetchCategorias();
 });

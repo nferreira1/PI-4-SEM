@@ -1,4 +1,4 @@
-import { produtosRecomendados } from "../components/produtosRecomendados.js";
+import { produtos as produtosFunction } from "../components/produtos.js";
 import { api } from "../lib/api.js";
 
 let imagemSelecionada;
@@ -89,5 +89,5 @@ document.addEventListener("DOMContentLoaded", async (e) => {
     produtoValor.textContent = Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(produto.valor);
     descricaoProduto.textContent = produto.descricao;
 
-    produtosRecomendados(produtosRecomendadosSection, produtos);
+    produtosFunction(produtosRecomendadosSection, produtos);
 });

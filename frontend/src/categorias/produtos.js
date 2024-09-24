@@ -1,4 +1,4 @@
-import { produtosRecomendados } from "../components/produtosRecomendados.js";
+import { produtos } from "../components/produtos.js";
 import { api } from "../lib/api.js";
 
 const produtosRecomendadosSection = document.getElementById("produtos");
@@ -14,5 +14,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const {data} = await handleFetchProdutos(categoriaId);
 
-    produtosRecomendados(produtosRecomendadosSection, data);
+    produtos(produtosRecomendadosSection, data);
 });

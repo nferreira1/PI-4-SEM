@@ -1,6 +1,6 @@
 import { formatarNumero } from "../lib/formatarNumero.js";
 
-export function produtosRecomendados(section, data) {
+export function produtos(section, data) {
     section.innerHTML = data.map(produto => {
         const imagemPrincipal = produto.imagens.find(imagem => imagem.imagemPrincipal);
         const imagem = imagemPrincipal ? imagemPrincipal.imagem : (produto.imagens.length > 0 ? produto.imagens[0].imagem : "");

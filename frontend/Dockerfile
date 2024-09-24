@@ -12,5 +12,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-# Comando para rodar a aplicação
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0"]
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]

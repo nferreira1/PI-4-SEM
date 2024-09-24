@@ -10,8 +10,6 @@ RUN dos2unix ./mvnw && chmod +x ./mvnw
 
 RUN ./mvnw clean package -DskipTests
 
-RUN ls -la target/
-
 COPY *.jar /app/backend.jar
 
 EXPOSE 8080

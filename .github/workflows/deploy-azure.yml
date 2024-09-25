@@ -77,5 +77,4 @@ jobs:
             docker rmi frontend-image || true &&
             docker load -i ~/images/frontend-image.tar.gz &&
             docker run -d -p 80:4173 \
-              -e VITE_API_URL=${{ secrets.VITE_API_URL }} \
               --name frontend-container frontend-image

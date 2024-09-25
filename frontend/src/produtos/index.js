@@ -86,7 +86,17 @@ document.addEventListener("DOMContentLoaded", async (e) => {
     adicionarEventosDeCliqueNasImagens(produto.imagens);
 
     nomeProduto.textContent = produto.nome;
-    produtoValor.textContent = Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(produto.valor);
+    produtoValor.innerHTML = `
+        <h6 class="text-2xl font-bold">
+            ${Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(produto.valor)}
+        </h6>
+        <span class="text-muted-foreground text-sm">
+            De: 
+            <span class="line-through">
+                ${Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(produto.valor)}
+            </span>
+        </span>
+    `;
     descricaoProduto.textContent = produto.descricao;
 
     produtosFunction(produtosRecomendadosSection, produtos);

@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-ENV VITE_API_URL="http://191.232.170.198/"
+ENV VITE_API_URL="http://191.232.170.198:8080"
 
 RUN npm install
 

@@ -1,24 +1,19 @@
 package br.edu.senac.DTO;
 
+
+import br.edu.senac.Entity.ClienteEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ClienteDTO {
+public class LoginDTO {
 
-    private String nome;
     private String email;
-    private String cpf;
-    private String telefone;
-    private List<EnderecoDTO> endereco = new ArrayList<EnderecoDTO>();
     private String senha;
-
+    private ClienteEntity cliente;
 }

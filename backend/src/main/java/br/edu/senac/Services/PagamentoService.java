@@ -25,7 +25,7 @@ public class PagamentoService implements IServicePattern<PagamentoEntity, Long> 
     }
 
     @Override
-    public PagamentoEntity insert(Long id, PagamentoEntity object) {
+    public PagamentoEntity insert( PagamentoEntity object) {
         return null;
     }
 

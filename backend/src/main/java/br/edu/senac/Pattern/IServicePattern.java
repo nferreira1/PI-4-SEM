@@ -8,10 +8,9 @@ public interface IServicePattern<T, U> {
 
     T findById(U id);
 
-    T insert(U id, T object);
+    T insert(T object);
 
     T update(U id, T object);
 
     void delete(U id);
-
 }

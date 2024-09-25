@@ -23,6 +23,10 @@ public class EnderecoEntity {
     private Long id;
 
     @Column(nullable = false)
+    @NotNull(message = "O endereço principal não pode ser nulo.")
+    private boolean enderecoPrincipal;
+
+    @Column(nullable = false)
     @NotBlank(message = "O logradouro não pode ser nulo e nem vazio.")
     private String logradouro;
 

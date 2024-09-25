@@ -37,7 +37,7 @@ public class ProdutoService implements IServicePattern<ProdutoEntity, Long> {
     }
 
     @Override
-    public ProdutoEntity insert(Long id, ProdutoEntity object) {
+    public ProdutoEntity insert( ProdutoEntity object) {
         return null;
     }
 

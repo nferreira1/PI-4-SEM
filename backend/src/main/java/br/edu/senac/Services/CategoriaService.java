@@ -27,7 +27,7 @@ public class CategoriaService implements IServicePattern<CategoriaEntity, Long> 
     }
 
     @Override
-    public CategoriaEntity insert(Long id, CategoriaEntity object) {
+    public CategoriaEntity insert( CategoriaEntity object) {
         return null;
     }
 

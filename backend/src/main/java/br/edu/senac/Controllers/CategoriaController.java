@@ -16,7 +16,7 @@ import java.util.List;
 @Tag(name = "Categoria")
 @RequestMapping("/categoria")
 @RestController
-public class CategoriaController {
+public class CategoriaController  {
 
     @Autowired
     private ModelMapper modelMapper;

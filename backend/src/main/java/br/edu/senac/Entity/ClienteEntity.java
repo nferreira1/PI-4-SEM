@@ -51,7 +51,7 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "clienteEntity")
     private List<PedidoEntity> pedidoEntities = new ArrayList<PedidoEntity>();
 
-    @OneToOne(mappedBy = "cliente")
-    private LoginEntity loginEntity;
+//    @OneToOne(mappedBy = "cliente")
+//    private LoginEntity loginEntity;
 
 }

@@ -48,6 +48,15 @@
         -moz-appearance: textfield;
         appearance: textfield;
     }
+
+    .scrollbaar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }
 
 ::-webkit-scrollbar {

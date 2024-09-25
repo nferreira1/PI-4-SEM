@@ -39,8 +39,9 @@
                     
                     <div id="produtoValor"></div>
                     
-                    <div class="flex items-center gap-4" id="produtoQuantidade">
-                        <button class="size-8 border rounded-sm flex justify-center items-center bg-background">
+                    <div class="flex items-center gap-4">
+                        <button class="size-8 border rounded-sm flex justify-center items-center bg-background"
+                                id="produtoDiminuirQuantidade">
                             <svg class="lucide lucide-chevron-left" fill="none" height="16" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
                                  width="16" xmlns="http://www.w3.org/2000/svg">
@@ -48,9 +49,10 @@
                             </svg>
                         </button>
                         
-                        <span class="text-sm">1</span>
+                        <span class="text-sm" id="produtoQuantidade"></span>
                         
-                        <button class="size-8 border rounded-sm flex justify-center items-center bg-background">
+                        <button class="size-8 border rounded-sm flex justify-center items-center bg-background"
+                                id="produtoAumentarQuantidade">
                             <svg class="lucide lucide-chevron-right" fill="none" height="16" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
                                  width="16" xmlns="http://www.w3.org/2000/svg">
@@ -64,7 +66,9 @@
                         <p class="text-muted-foreground text-sm" id="descricaoProduto"></p>
                     </div>
                     
-                    <button class="bg-primary font-semibold p-3 rounded-2xl">ADICIONAR AO CARRINHO</button>
+                    <button class="bg-primary font-semibold p-3 rounded-2xl" id="buttonAdicionarAoCarrinho">ADICIONAR AO
+                        CARRINHO
+                    </button>
                     
                     <div class="flex items-center bg-muted rounded-xl py-4 px-6 gap-x-6 md:bg-accent">
                         <svg fill="none" height="31" viewBox="0 0 30 31" width="30" xmlns="http://www.w3.org/2000/svg">

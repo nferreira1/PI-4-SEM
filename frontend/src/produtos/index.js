@@ -1,14 +1,20 @@
 import { produtos as produtosFunction } from "../components/produtos.js";
 import { api } from "../lib/api.js";
+import { adicionarAoCarrinho } from "../lib/carrinho.js";
 
 let imagemSelecionada;
 let buttonSelecionado;
+let quantidade = 1;
 const imagemPrincipal = document.getElementById("imagemPrincipal");
 const divImagensLista = document.querySelectorAll("[data-name='imagens']");
 const divEstrelas = document.getElementById("estrelas");
 const nomeProduto = document.getElementById("nomeProduto");
 const produtoValor = document.getElementById("produtoValor");
+const produtoQuantidade = document.getElementById("produtoQuantidade");
+const produtoDiminuirQuantidade = document.getElementById("produtoDiminuirQuantidade");
+const produtoAumentarQuantidade = document.getElementById("produtoAumentarQuantidade");
 const descricaoProduto = document.getElementById("descricaoProduto");
+const buttonAdicionarAoCarrinho = document.getElementById("buttonAdicionarAoCarrinho");
 const produtosRecomendadosSection = document.getElementById("produtosRecomendadosSection");
 
 const handleSelecionarImagemProduto = (imagem, button) => {
@@ -24,6 +30,21 @@ const handleSelecionarImagemProduto = (imagem, button) => {
     buttonSelecionado = button;
 };
 
+const renderizarProdutoQuantidade = () => {
+    produtoQuantidade.innerText = quantidade;
+};
+
+const handleAumentarQuantidadeProduto = () => {
+    quantidade++;
+    renderizarProdutoQuantidade();
+};
+
+const handleDiminuirQuantidadeProduto = () => {
+    if (quantidade > 1) {
+        quantidade--;
+        renderizarProdutoQuantidade();
+    }
+};
 
 const adicionarEventosDeCliqueNasImagens = (imagens) => {
     divImagensLista.forEach(div => {
@@ -97,7 +118,16 @@ document.addEventListener("DOMContentLoaded", async (e) => {
             </span>
         </span>
     `;
+    produtoDiminuirQuantidade.addEventListener("click", handleDiminuirQuantidadeProduto);
+    produtoAumentarQuantidade.addEventListener("click", handleAumentarQuantidadeProduto);
+
     descricaoProduto.textContent = produto.descricao;
 
     produtosFunction(produtosRecomendadosSection, produtos);
+    renderizarProdutoQuantidade();
+    buttonAdicionarAoCarrinho.addEventListener("click", () => {
+        const nome = nomeProduto.textContent;
+        const valor = parseFloat(produtoValor.querySelector("h6").textContent.replace(/[^\d,-]/g, "").replace(",", "."));
+        adicionarAoCarrinho(produtoId, nome, valor, valor, imagemPrincipal.src, quantidade);
+    });
 });

@@ -16,6 +16,7 @@ public class PagamentoService implements IServicePattern<PagamentoEntity, Long> 
 
     @Override
     public List<PagamentoEntity> findAll() {
+
         return pagamentoRepository.findAll();
     }
 
@@ -28,6 +29,7 @@ public class PagamentoService implements IServicePattern<PagamentoEntity, Long> 
     public PagamentoEntity insert( PagamentoEntity object) {
         return null;
     }
+
 
     @Override
     public PagamentoEntity update(Long id, PagamentoEntity object) {

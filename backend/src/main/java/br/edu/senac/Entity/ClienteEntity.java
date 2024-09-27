@@ -1,5 +1,6 @@
 package br.edu.senac.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -48,10 +49,12 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "clienteEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EnderecoEntity> enderecoEntities = new ArrayList<EnderecoEntity>();
 
+
     @OneToMany(mappedBy = "clienteEntity")
     private List<PedidoEntity> pedidoEntities = new ArrayList<PedidoEntity>();
 
-//    @OneToOne(mappedBy = "cliente")
-//    private LoginEntity loginEntity;
+    @JsonIgnore
+    @OneToOne(mappedBy = "cliente")
+    private LoginEntity loginEntity;
 
 }

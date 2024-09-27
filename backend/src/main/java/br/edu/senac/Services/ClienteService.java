@@ -25,7 +25,7 @@ public class ClienteService  implements IServicePattern<ClienteEntity, Long> {
 
     @Override
     public List<ClienteEntity> findAll() {
-        return List.of();
+        return clienteRepository.findAll();
     }
 
     @Override

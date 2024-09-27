@@ -14,4 +14,5 @@ public interface IControllerPattern<T, U> {
     ResponseEntity<T> post(T object);
 
     ResponseEntity<T> put(U id, T object);
+
 }

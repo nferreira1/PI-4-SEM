@@ -37,10 +37,9 @@ public class PagamentoEntity {
     @OneToMany(mappedBy = "pagamentoEntity", cascade = CascadeType.ALL)
     private List<PedidoEntity> pedidoEntity;
 
-    private int statusPagamento;
+    @Column(nullable = false)
+    @NotNull(message = "O status do pagamento não pode ser Nulo")
+    @Enumerated(EnumType.STRING)
+    private StatusPagamento statusPagamento;
 
-    private StatusPagamento getTipoPagamento(int statusPagamento)
-    {
-        return StatusPagamento.valueOf(statusPagamento);
-    }
 }

@@ -1,14 +1,10 @@
 package br.edu.senac.Controllers;
 
 import br.edu.senac.DTO.ClienteDTO;
-import br.edu.senac.DTO.ProdutoDTO;
 import br.edu.senac.Entity.ClienteEntity;
-import br.edu.senac.Entity.ProdutoEntity;
 import br.edu.senac.Pattern.IControllerPattern;
 import br.edu.senac.Services.ClienteService;
 import br.edu.senac.Services.LoginService;
-import ch.qos.logback.core.net.server.Client;
-import io.micrometer.observation.annotation.Observed;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -33,7 +29,7 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     @Autowired
     private ClienteService clienteService;
 
-   @Autowired
+    @Autowired
     private LoginService loginService;
 
     @GetMapping
@@ -57,7 +53,7 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
         var cliente = modelMapper.map(object, ClienteEntity.class);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
         this.clienteService.insert(cliente);
-          this.loginService.insert(cliente, object.getSenha());
+        this.loginService.insert(cliente, object.getSenha());
         return ResponseEntity.created(uri).body(modelMapper.map(cliente, ClienteDTO.class));
     }
 
@@ -74,5 +70,10 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
         ClienteDTO produtoResponseDTO = modelMapper.map(clienteAtualizado, ClienteDTO.class);
 
         return ResponseEntity.ok().body(produtoResponseDTO);
+    }
+
+    @Override
+    public ResponseEntity<ClienteDTO> delete(Long id) {
+        return null;
     }
 }

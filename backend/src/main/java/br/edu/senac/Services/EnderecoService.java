@@ -14,7 +14,6 @@ public class EnderecoService implements IServicePattern<EnderecoEntity, Long> {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-
     @Override
     public List<EnderecoEntity> findAll() {
         return List.of();

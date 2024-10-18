@@ -25,7 +25,7 @@ public class CategoriaEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @Size(min = 3, message = "A categoria tem que ter no mínimo 3 caracteres.")
+    @Size(min = 3, message = "A nome da categoria tem que ter no mínimo 3 caracteres.")
     @NotBlank(message = "O nome da categoria não pode ser nulo e nem vazio.")
     private String nome;
 

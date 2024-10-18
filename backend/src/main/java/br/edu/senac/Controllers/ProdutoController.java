@@ -57,4 +57,10 @@ public class ProdutoController implements IControllerPattern<ProdutoDTO, Long> {
     public ResponseEntity<ProdutoDTO> put(Long id, ProdutoDTO object) {
         return null;
     }
+
+    @Override
+    public ResponseEntity<ProdutoDTO> delete(Long id) {
+        return null;
+    }
+
 }

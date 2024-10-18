@@ -47,5 +47,10 @@ public class PedidoController implements IControllerPattern<PedidoEntity, Long> 
         return null;
     }
 
+    @Override
+    public ResponseEntity<PedidoEntity> delete(Long id) {
+        return null;
+    }
+
 }
 

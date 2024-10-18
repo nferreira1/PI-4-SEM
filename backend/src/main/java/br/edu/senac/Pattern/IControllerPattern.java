@@ -15,4 +15,6 @@ public interface IControllerPattern<T, U> {
 
     ResponseEntity<T> put(U id, T object);
 
+    ResponseEntity<T> delete(U id);
+
 }

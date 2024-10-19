@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-	console.log(request);
+	console.log("Request URL:", request.url);
 }
 
 export const config = {

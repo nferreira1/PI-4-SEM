@@ -5,7 +5,6 @@ import br.edu.senac.Entity.CategoriaEntity;
 import br.edu.senac.Exceptions.ErrorResponseException;
 import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.CategoriaRepository;
-import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,17 +21,16 @@ public class CategoriaService implements IServicePattern<CategoriaEntity, Long> 
     @Autowired
     private ImageManagerService imageManagerService;
 
-    @Autowired
-    private Validator validator;
-
+    @Override
     public List<CategoriaEntity> findAll() {
-        return this.categoriarepository.findAllByStatusTrue();
+        return this.categoriarepository.findAll();
     }
 
     @Override
     public CategoriaEntity findById(Long id) {
         return this.categoriarepository.findById(id).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Categoria não encontrada."));
+                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Categoria não encontrada.")
+        );
     }
 
     @Override

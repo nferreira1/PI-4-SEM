@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,22 +32,25 @@ public class ProdutoController implements IControllerPattern<ProdutoDTO, Long> {
         return ResponseEntity.ok().body(produtoDTOS);
     }
 
-    @GetMapping("/categoria/{categoriaId}")
+    @GetMapping("/categoria/{categoriaId}/produtos")
     public ResponseEntity<List<ProdutoDTO>> getByCategoriaEntityId(@PathVariable Long categoriaId) {
         List<ProdutoEntity> produtoEntities = this.produtoService.findByCategoriaEntityId(categoriaId);
         List<ProdutoDTO> produtoDTOS = produtoEntities.stream().map(produto -> modelMapper.map(produto, ProdutoDTO.class)).toList();
         return ResponseEntity.ok().body(produtoDTOS);
     }
 
-    @GetMapping("/{id}")
     @Override
+    @GetMapping("/{id}")
     public ResponseEntity<ProdutoDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok().body(modelMapper.map(this.produtoService.findById(id), ProdutoDTO.class));
     }
 
     @Override
-    public ResponseEntity<ProdutoDTO> post(ProdutoDTO object) {
-        return null;
+    @PostMapping
+    public ResponseEntity<ProdutoDTO> post(@RequestBody ProdutoDTO object) {
+        var novoProduto = this.produtoService.insert(modelMapper.map(object, ProdutoEntity.class));
+        var produtoResponse = modelMapper.map(novoProduto, ProdutoDTO.class);
+        return ResponseEntity.ok().body(produtoResponse);
     }
 
     @Override

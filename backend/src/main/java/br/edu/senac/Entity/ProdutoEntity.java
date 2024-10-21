@@ -44,7 +44,7 @@ public class ProdutoEntity {
     private boolean status = true;
 
     @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProdutoImagensEntity> produtoImagensEntities = new ArrayList<>();
+    private List<ProdutoImagensEntity> imagens = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)

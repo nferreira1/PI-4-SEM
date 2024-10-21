@@ -31,7 +31,7 @@ public class CategoriaEntity {
 
     @Column(nullable = false)
     @NotNull(message = "O status da categoria não pode ser nulo.")
-    private Boolean status = true;
+    private boolean status = true;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @NotNull(message = "A imagem do produto não pode ser nula.")

@@ -60,7 +60,7 @@ public class ProdutoService implements IServicePattern<ProdutoEntity, Long> {
         produtoImagens.forEach(imagem -> imagem.setProdutoEntity(produto));
 
         for (byte i = 0; i < produtoImagens.size(); i++) {
-            var urlImage = this.imageManagerService.insert(produtoImagens.get(i).getImagem(), "/produtos", i + "-" + produto.getId() + "-" + produto.getNome()).orElseThrow(
+            var urlImage = this.imageManagerService.insert(produtoImagens.get(i).getImagem(), "/produtos", produto.getId() + "-" + produto.getNome() + "-" + i).orElseThrow(
                     () -> new ErrorResponseException(HttpStatus.BAD_REQUEST, "Erro ao salvar a imagem.")
             );
             produtoImagens.get(i).setImagem(urlImage);
@@ -76,27 +76,22 @@ public class ProdutoService implements IServicePattern<ProdutoEntity, Long> {
     @ValidateBeforeExecutionAnnotation
     public ProdutoEntity update(Long id, ProdutoEntity object) {
         var produto = this.findById(id);
-        var novasImagens = object.getImagens();
 
-        var imagensParaRemover = new ArrayList<>(produto.getImagens());
-        imagensParaRemover.removeAll(novasImagens);
-
-        for (var imagem : imagensParaRemover) {
+        for (var imagem : new ArrayList<>(produto.getImagens())) {
             this.imageManagerService.delete(imagem.getImagem());
             produto.getImagens().remove(imagem);
         }
 
+        var novasImagens = object.getImagens();
+
         for (int i = 0; i < novasImagens.size(); i++) {
             var novaImagem = novasImagens.get(i);
-
-            if (!produto.getImagens().contains(novaImagem)) {
-                String urlImage = this.imageManagerService.insert(novaImagem.getImagem(), "/produtos", i + "-" + produto.getId() + "-" + produto.getNome()).orElseThrow(
-                        () -> new ErrorResponseException(HttpStatus.BAD_REQUEST, "Erro ao salvar a imagem.")
-                );
-                novaImagem.setImagem(urlImage);
-                novaImagem.setProdutoEntity(produto);
-                produto.getImagens().add(novaImagem);
-            }
+            String urlImage = this.imageManagerService.insert(novaImagem.getImagem(), "/produtos", produto.getId() + "-" + produto.getNome() + "-" + i).orElseThrow(
+                    () -> new ErrorResponseException(HttpStatus.BAD_REQUEST, "Erro ao salvar a imagem.")
+            );
+            novaImagem.setImagem(urlImage);
+            novaImagem.setProdutoEntity(produto);
+            produto.getImagens().add(novaImagem);
         }
 
         produto.setNome(object.getNome());
@@ -108,7 +103,6 @@ public class ProdutoService implements IServicePattern<ProdutoEntity, Long> {
 
         return this.produtoRepository.save(produto);
     }
-
 
     @Transactional
     public ProdutoEntity update(Long id) {
@@ -122,5 +116,6 @@ public class ProdutoService implements IServicePattern<ProdutoEntity, Long> {
     public void delete(Long id) {
         var produto = this.findById(id);
         this.produtoRepository.delete(produto);
+        produto.getImagens().forEach(imagem -> this.imageManagerService.delete(imagem.getImagem()));
     }
 }

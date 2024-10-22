@@ -2,14 +2,21 @@ package br.edu.senac.Controllers;
 
 import br.edu.senac.DTO.CategoriaDTO;
 import br.edu.senac.Entity.CategoriaEntity;
+import br.edu.senac.Exceptions.ErrorResponseException;
 import br.edu.senac.Pattern.IControllerPattern;
 import br.edu.senac.Services.CategoriaService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Tag(name = "Categoria")
@@ -46,7 +53,8 @@ public class CategoriaController implements IControllerPattern<CategoriaDTO, Lon
     public ResponseEntity<CategoriaDTO> post(@RequestBody CategoriaDTO object) {
         var novaCategoria = this.categoriaService.insert(modelMapper.map(object, CategoriaEntity.class));
         var categoriaResponse = modelMapper.map(novaCategoria, CategoriaDTO.class);
-        return ResponseEntity.ok().body(categoriaResponse);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoriaResponse.getId()).toUri();
+        return ResponseEntity.created(uri).body(categoriaResponse);
     }
 
     @Override
@@ -58,6 +66,11 @@ public class CategoriaController implements IControllerPattern<CategoriaDTO, Lon
     }
 
     @PatchMapping("/{categoriaId}/status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+    })
     public ResponseEntity<CategoriaDTO> patch(@PathVariable Long categoriaId) {
         var categoria = this.categoriaService.update(categoriaId);
         var categoriaResponse = modelMapper.map(categoria, CategoriaDTO.class);
@@ -66,7 +79,7 @@ public class CategoriaController implements IControllerPattern<CategoriaDTO, Lon
 
     @Override
     @DeleteMapping("/{categoriaId}")
-    public ResponseEntity<CategoriaDTO> delete(@PathVariable Long categoriaId) {
+    public ResponseEntity<Void> delete(@PathVariable Long categoriaId) {
         this.categoriaService.delete(categoriaId);
         return ResponseEntity.noContent().build();
     }

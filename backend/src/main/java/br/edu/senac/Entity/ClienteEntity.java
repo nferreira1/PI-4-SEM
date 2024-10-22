@@ -49,7 +49,6 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "clienteEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EnderecoEntity> enderecoEntities = new ArrayList<EnderecoEntity>();
 
-
     @OneToMany(mappedBy = "clienteEntity")
     private List<PedidoEntity> pedidoEntities = new ArrayList<PedidoEntity>();
 

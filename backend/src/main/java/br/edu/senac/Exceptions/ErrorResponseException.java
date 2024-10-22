@@ -1,5 +1,6 @@
 package br.edu.senac.Exceptions;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import java.util.Objects;
 
 @Getter
 @JsonIncludeProperties({"status", "message", "errors"})
+@JsonIgnoreProperties({"cause", "stackTrace", "localizedMessage", "suppressed"})
 public class ErrorResponseException extends RuntimeException {
 
     private final int status;

@@ -32,8 +32,8 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     @Autowired
     private LoginService loginService;
 
-    @GetMapping
     @Override
+    @GetMapping
     public ResponseEntity<List<ClienteDTO>> getAll() {
         List<ClienteEntity> clienteEntities = this.clienteService.findAll();
         List<ClienteDTO> clienteDTOS = clienteEntities.stream().
@@ -41,15 +41,15 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
         return ResponseEntity.ok().body(clienteDTOS);
     }
 
-    @GetMapping("/{id}")
     @Override
-    public ResponseEntity<ClienteDTO> getById(Long id) {
-        return ResponseEntity.ok().body(modelMapper.map(this.clienteService.findById(id), ClienteDTO.class));
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<ClienteDTO> getById(@PathVariable Long clienteId) {
+        return ResponseEntity.ok().body(modelMapper.map(this.clienteService.findById(clienteId), ClienteDTO.class));
     }
 
-    @PostMapping
     @Override
-    public ResponseEntity<ClienteDTO> post(ClienteDTO object) {
+    @PostMapping
+    public ResponseEntity<ClienteDTO> post(@RequestBody ClienteDTO object) {
         var cliente = modelMapper.map(object, ClienteEntity.class);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
         this.clienteService.insert(cliente);
@@ -57,11 +57,11 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
         return ResponseEntity.created(uri).body(modelMapper.map(cliente, ClienteDTO.class));
     }
 
-    @PutMapping("/{id}")
     @Override
-    public ResponseEntity<ClienteDTO> put(@PathVariable Long id, @Valid @RequestBody ClienteDTO produtoDTO) {
+    @PutMapping("/{clienteId}")
+    public ResponseEntity<ClienteDTO> put(@PathVariable Long clienteId, @Valid @RequestBody ClienteDTO produtoDTO) {
 
-        ClienteEntity cliente = clienteService.findById(id);
+        ClienteEntity cliente = clienteService.findById(clienteId);
         if (cliente == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -73,7 +73,7 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     }
 
     @Override
-    public ResponseEntity<ClienteDTO> delete(Long id) {
+    public ResponseEntity<Void> delete(Long id) {
         return null;
     }
 }

@@ -60,7 +60,7 @@ public class ImageManagerService {
         isValidImage(base64Image);
 
         var extension = base64Image.split("/")[1].split(";")[0];
-        var filenameWithExtensionImage = finalImageName + "." + extension;
+        var filenameWithExtensionImage = finalImageName.replaceAll(" ", "_") + "." + extension;
         var base64ImageString = base64Image.split(",")[1];
 
         String localFilePath = localDirectory + filenameWithExtensionImage;

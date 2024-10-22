@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  * <pre>
  * {@code
  *  @ValidateBeforeExecutionAnnotation
- *  public void meuMetodo(@Valid MinhaEntidade entidade) {
+ *  public void meuMetodo(MinhaEntidade entidade) {
  *      // A validação será realizada antes de executar a lógica do método
  *  }
  * }
@@ -42,5 +42,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidateBeforeExecutionAnnotation {
-    
+
 }

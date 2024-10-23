@@ -44,6 +44,7 @@ public class ProdutoEntity {
     private boolean status = true;
 
     @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @NotEmpty(message = "O produto deve ter pelo menos uma imagem.")
     private List<ProdutoImagensEntity> imagens = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

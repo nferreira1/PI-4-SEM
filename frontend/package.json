@@ -7,8 +7,8 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"prepare": "husky",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"prepare": "copy .husky\\pre-commit ..\\.git\\hooks\\pre-commit"
 	},
 	"lint-staged": {
 		"src/**/*.{js,ts,jsx,tsx}": [
@@ -40,7 +40,6 @@
 		"eslint-config-next": "14.2.15",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.2.1",
-		"husky": "^9.1.6",
 		"lint-staged": "^15.2.10",
 		"openapi-typescript": "^7.4.1",
 		"postcss": "^8",

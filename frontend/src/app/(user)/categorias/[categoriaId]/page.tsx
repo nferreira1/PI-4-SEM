@@ -1,0 +1,114 @@
+import { api } from "@/lib/api";
+import { formatNumber } from "@/lib/utils";
+import { validateSchema } from "@/lib/validate-schema";
+import { MoveDown, Star } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { z } from "zod";
+
+export default async function Page({
+	params,
+}: {
+	readonly params: {
+		categoriaId: string;
+	};
+}) {
+	const schema = z.object({
+		categoriaId: z.coerce.number().refine((value) => !isNaN(value), {
+			message: "Categoria não encontrada.",
+		}),
+	});
+
+	const { result } = validateSchema(schema, params);
+
+	const [{ data: dataCategorias }, { data: dataProdutos }] =
+		await Promise.all([
+			await api.GET("/categoria/{categoriaId}", {
+				params: {
+					path: {
+						categoriaId: result.categoriaId,
+					},
+				},
+			}),
+			await api.GET("/produto/categoria/{categoriaId}/produtos", {
+				params: {
+					path: {
+						categoriaId: result.categoriaId,
+					},
+				},
+				cache: "no-cache",
+			}),
+		]);
+
+	return (
+		<>
+			<section className="pb-8">
+				<div className="flex w-min items-center space-x-1 rounded-full border-2 border-primary px-4 py-1">
+					<span className="text-sm font-semibold">
+						{dataCategorias?.nome}
+					</span>
+				</div>
+			</section>
+
+			<section className="flex flex-wrap gap-6">
+				{dataProdutos?.map((produto) => (
+					<Link
+						key={produto.id}
+						href={`/produtos/${produto.id}`}
+						className="inline-block"
+					>
+						<div className="flex h-52 w-40 flex-col lg:h-60 lg:w-44">
+							<div className="relative flex grow items-center justify-center rounded-md bg-muted">
+								<div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-2xl bg-primary px-2 py-1.5">
+									<MoveDown size={14} strokeWidth={3} />
+									<span className="text-xs font-semibold">
+										55%
+									</span>
+								</div>
+								<Image
+									alt={produto.nome ?? "Produto sem nome"}
+									src={
+										produto.imagens?.find(
+											(imagem) => imagem.imagemPrincipal,
+										)?.imagem ?? ""
+									}
+									width={96}
+									height={96}
+									className="object-contain"
+								/>
+							</div>
+							<div className="flex h-2/6 flex-col space-y-0.5 pt-2">
+								<span className="truncate text-xs lg:text-sm">
+									{produto.nome}
+								</span>
+								<div className="flex items-baseline gap-1">
+									<span className="font-semibold lg:text-lg">
+										{formatNumber(produto.valor!)}
+									</span>
+									<span className="text-xs text-muted-foreground line-through lg:text-sm">
+										{formatNumber(produto.valor!)}
+									</span>
+								</div>
+								<div className="flex items-center gap-0.5">
+									{Array.from({ length: 5 }).map(
+										(_, index) => (
+											<Star
+												key={index}
+												size={15}
+												data-last={index === 4}
+												className="fill-primary text-primary data-[last=true]:fill-transparent"
+											/>
+										),
+									)}
+									<span className="ml-1 text-xs text-muted-foreground lg:text-sm">
+										(25)
+									</span>
+								</div>
+							</div>
+						</div>
+					</Link>
+				))}
+			</section>
+		</>
+	);
+}

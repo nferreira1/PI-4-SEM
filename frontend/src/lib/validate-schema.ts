@@ -7,11 +7,7 @@ export function validateSchema<T extends z.ZodTypeAny>(
 	const { success, error, data: result } = schema.safeParse(data);
 
 	if (!success) {
-		return {
-			success,
-			result: null as z.infer<typeof schema>,
-			error,
-		};
+		throw new Error("Ocorreu um erro ao validar o schema.");
 	}
 
 	return {

@@ -5,7 +5,7 @@ export default async function Loading() {
 	return (
 		<>
 			<Skeleton className="mb-8 w-24 rounded-full py-4" />
-			<section className="flex flex-wrap justify-center gap-6 px-5">
+			<section className="flex flex-wrap gap-6">
 				{Array.from({ length: 2 }).map(() =>
 					Array.from({ length: 6 }).map(() => (
 						<div

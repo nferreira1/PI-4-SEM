@@ -65,11 +65,14 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
   - SPRING_DATASOURCE_PASSWORD (Senha de usuário em que fará a conexão com o banco de dados);
   - API_URL (URL da API para efetuar as requisições no Front-End);
   - DIRECTORY_SERVER_IMAGES (Diretório da Máquina Virtual onde ficará salvo as imagens);
+- Crie uma Máquina Virtual na [Azure](https://portal.azure.com/) ou na [AWS](https://aws.amazon.com/);
+- Faça uma conexão SSH informando o nome de usuário e o IP da Máquina Virtual:
+  ```bash
+  ssh SSH_USERNAME@VP_IP
 - Atualize todas as dependências do sistema:
   ```bash
   sudo apt update
   sudo apt upgrade
-- Crie uma Máquina Virtual na [Azure](https://portal.azure.com/) ou na [AWS](https://aws.amazon.com/);
 - Crie uma pasta no diretório raiz do servidor. O nome dessa pasta deve ser o mesmo da pasta pai definida na variável de ambiente `DIRECTORY_SERVER_IMAGES`. Isso garante consistência no caminho de armazenamento das imagens.
   ```bash
   sudo mkdir /techcommerce

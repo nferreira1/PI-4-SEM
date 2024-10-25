@@ -73,6 +73,9 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
 - Crie uma pasta no diretório raiz do servidor. O nome dessa pasta deve ser o mesmo da pasta pai definida na variável de ambiente `DIRECTORY_SERVER_IMAGES`. Isso garante consistência no caminho de armazenamento das imagens.
   ```bash
   sudo mkdir /techcommerce
+- Crie uma sub pasta no diretório para fazer o upload das imagens do docker após o build, ela deve ter o nome de `docker-images`.
+  ```bash
+  sudo mkdir /techcommerce/docker-images
 - Ajuste as permissões dessa pasta para permitir que qualquer usuário do sistema possa ler, escrever e executar arquivos dentro dela.
   ```bash
   sudo chmod 777 /techcommerce

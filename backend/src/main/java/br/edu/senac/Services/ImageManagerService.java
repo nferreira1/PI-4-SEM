@@ -12,15 +12,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -28,33 +25,11 @@ public class ImageManagerService {
 
     private static final String localDirectory = "./temp/images/";
 
-    @Value("${IP_SERVER_IMAGES}")
-    private String ipServerImages;
-
-    @Value("${USERNAME_SERVER_IMAGES}")
-    private String usernameServerImages;
-
     @Value("${DIRECTORY_SERVER_IMAGES}")
     private String directoryServerImages;
 
     @Value("${VM_IP}")
     private String vmIP;
-
-    @Value("${DIRECTORY_AZURE_IMAGES}")
-    private String directoryAzureImages;
-
-    public Optional<Boolean> findByPath(String path) {
-        try {
-            URL url = new URL("http://" + ipServerImages + directoryServerImages + path);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("HEAD");
-
-            int responseCode = connection.getResponseCode();
-            return Optional.of(responseCode == HttpURLConnection.HTTP_OK);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
 
     public Optional<String> insert(String base64Image, String subDirectory, String finalImageName) {
         isValidImage(base64Image);
@@ -64,17 +39,19 @@ public class ImageManagerService {
         var base64ImageString = base64Image.split(",")[1];
 
         String localFilePath = localDirectory + filenameWithExtensionImage;
-        String remoteDirectoryPath = directoryServerImages + subDirectory;
-        String azureDirectoryPath = directoryAzureImages + subDirectory + "/" + filenameWithExtensionImage;
+        saveBase64ImageToFile(base64ImageString, localFilePath);
+
+        Path destinationPath = Paths.get(directoryServerImages, subDirectory, filenameWithExtensionImage);
 
         try {
-            saveBase64ImageToFile(base64ImageString, localFilePath);
-            uploadImage(filenameWithExtensionImage, remoteDirectoryPath);
-            log.info("Imagem enviada com sucesso para o servidor: {}{}", ipServerImages, remoteDirectoryPath + filenameWithExtensionImage);
-            return Optional.of("http://" + vmIP + azureDirectoryPath);
-        } catch (IOException | InterruptedException e) {
-            log.error("Erro ao processar a imagem: {}", e.getMessage());
-            return Optional.empty();
+            createDirectoryIfNotExists(destinationPath.getParent().toString());
+
+            Files.copy(Paths.get(localFilePath), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+            log.info("Imagem salva com sucesso no servidor: {}", destinationPath);
+            return Optional.of("http://" + vmIP + directoryServerImages + subDirectory + "/" + filenameWithExtensionImage);
+        } catch (Exception e) {
+            throw new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao mover a imagem para o servidor.");
         } finally {
             try {
                 deleteTemporaryFile(localFilePath);
@@ -84,50 +61,32 @@ public class ImageManagerService {
         }
     }
 
-    public Optional<String> update(String currentImage, String base64Image, String finalImageName) {
-        isValidImage(base64Image);
-        this.delete(currentImage);
+    public void delete(String imageUrl) {
+        String baseUrl = "http://" + vmIP;
+        String filePath = imageUrl.replace(baseUrl, "");
 
-        Pattern pattern = Pattern.compile(".*?/images(.*)");
-        Matcher matcher = pattern.matcher(currentImage);
-        String subDirectory = null;
-
-        if (matcher.find()) {
-            subDirectory = matcher.group(1).substring(0, matcher.group(1).lastIndexOf("/"));
-        } else {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "Ocorreu um erro ao tentar atualizar a imagem.");
-        }
-
-        return this.insert(base64Image, subDirectory, finalImageName);
-    }
-
-    public void delete(String path) {
-        this.findByPath(path).orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Imagem não encontrada."));
-
-        Pattern pattern = Pattern.compile("/images(.*)");
-        Matcher matcher = pattern.matcher(path);
-
-        if (matcher.find()) {
-            path = matcher.group(1);
-        } else {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "Ocorreu um erro ao tentar excluir a imagem.");
-        }
-
-        String command = String.format("ssh -o StrictHostKeyChecking=no %s@%s rm %s", usernameServerImages, ipServerImages, directoryServerImages + path);
+        Path imagePath = Paths.get(filePath);
 
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-            Process process = processBuilder.start();
-            int exitCode = process.waitFor();
-
-            if (exitCode == 0) {
-                log.info("Arquivo excluído com sucesso.");
+            if (Files.exists(imagePath)) {
+                Files.delete(imagePath);
+                log.info("Imagem excluída com sucesso: {}", imagePath.toString());
             } else {
-                throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "Ocorreu um erro ao tentar excluir a imagem.");
+                throw new ErrorResponseException(HttpStatus.NOT_FOUND, "Imagem não encontrada.");
             }
-        } catch (Exception e) {
-            throw new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno no servidor.");
+        } catch (IOException e) {
+            throw new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao excluir a imagem.");
         }
+    }
+
+    public Optional<String> update(String currentImage, String base64Image, String finalImageName) {
+        String baseUrl = "http://" + vmIP + directoryServerImages;
+        String relativePath = currentImage.replace(baseUrl, "");
+        String subDirectory = relativePath.contains("/") ? relativePath.substring(0, relativePath.indexOf("/")) : "";
+
+        this.delete(currentImage);
+
+        return this.insert(base64Image, subDirectory, finalImageName);
     }
 
     private void isValidImage(String base64Image) {
@@ -161,20 +120,6 @@ public class ImageManagerService {
             fos.write(imageBytes);
         } catch (Exception e) {
             throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "Ocorreu um erro ao salvar a imagem.");
-        }
-    }
-
-    private void uploadImage(String finalImageName, String remoteDirectoryPath) throws IOException, InterruptedException {
-        String command = String.format("scp %s %s@%s:%s/%s", localDirectory + finalImageName, usernameServerImages, ipServerImages, remoteDirectoryPath, finalImageName);
-        log.info(command);
-        ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
-        Process process = processBuilder.start();
-        int exitCode = process.waitFor();
-
-        if (exitCode == 0) {
-            log.info("Arquivo enviado com sucesso para o servidor.");
-        } else {
-            throw new IOException("Falha ao enviar o arquivo. Código de saída: " + exitCode);
         }
     }
 

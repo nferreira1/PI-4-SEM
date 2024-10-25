@@ -1,80 +1,82 @@
 name: Deploy do frontend e backend na VM da Azure
 
 on:
-  release:
-    types: [published]  # Executa o deploy quando lançar uma nova versão
+    release:
+        types: [published] # Executa o deploy quando lançar uma nova versão
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v2
 
-      # ----- Buildar, Transferir e Deploy do Backend -----
-      - name: Buildar a imagem do backend
-        run: docker build -t backend-image ./backend
+            # ----- Buildar, Transferir e Deploy do Backend -----
+            - name: Buildar a imagem do backend
+              run: docker build -t backend-image ./backend
 
-      - name: Salvar a imagem do backend
-        run: docker save backend-image | gzip > backend-image.tar.gz
+            - name: Salvar a imagem do backend
+              run: docker save backend-image | gzip > backend-image.tar.gz
 
-      - name: Transferir a imagem do backend para a VM
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VM_IP }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          source: "backend-image.tar.gz"
-          target: "~/images/"
+            - name: Transferir a imagem do backend para a VM
+              uses: appleboy/scp-action@master
+              with:
+                  host: ${{ secrets.VM_IP }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  password: ${{ secrets.SSH_PASSWORD }}
+                  port: 22
+                  source: "backend-image.tar.gz"
+                  target: "/techcommerce/docker-images/"
 
-      - name: Parar, remover e rodar o backend
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VM_IP }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          script: |
-            docker stop backend-container || true &&
-            docker rm backend-container || true &&
-            docker rmi backend-image || true &&
-            docker load -i ~/images/backend-image.tar.gz &&
-            docker run -d -p 8080:8080 \
-              -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
-              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
-              -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
-              --name backend-container backend-image
+            - name: Parar, remover e rodar o backend
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.VM_IP }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  password: ${{ secrets.SSH_PASSWORD }}
+                  port: 22
+                  script: |
+                      docker stop backend-container || true &&
+                      docker rm backend-container || true &&
+                      docker rmi backend-image || true &&
+                      docker load -i /techcommerce/docker-images/backend-image.tar.gz &&
+                      docker run -d -p 8080:8080 \
+                        -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
+                        -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
+                        -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
+                        -e DIRECTORY_SERVER_IMAGES=${{ secrets.DIRECTORY_SERVER_IMAGES }} \
+                        -e VM_IP=${{ secrets.VM_IP }} \
+                        --name backend-container backend-image
 
-      # ----- Buildar, Transferir e Deploy do Frontend -----
-      - name: Buildar a imagem do frontend
-        run: docker build -t frontend-image ./frontend
+            # ----- Buildar, Transferir e Deploy do Frontend -----
+            - name: Buildar a imagem do frontend
+              run: docker build -t frontend-image ./frontend
 
-      - name: Salvar a imagem do frontend
-        run: docker save frontend-image | gzip > frontend-image.tar.gz
+            - name: Salvar a imagem do frontend
+              run: docker save frontend-image | gzip > frontend-image.tar.gz
 
-      - name: Transferir a imagem do frontend para a VM
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VM_IP }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          source: "frontend-image.tar.gz"
-          target: "~/images/"
+            - name: Transferir a imagem do frontend para a VM
+              uses: appleboy/scp-action@master
+              with:
+                  host: ${{ secrets.VM_IP }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  password: ${{ secrets.SSH_PASSWORD }}
+                  port: 22
+                  source: "frontend-image.tar.gz"
+                  target: "/techcommerce/docker-images/"
 
-      - name: Parar, remover e rodar o frontend
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VM_IP }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          script: |
-            docker stop frontend-container || true &&
-            docker rm frontend-container || true &&
-            docker rmi frontend-image || true &&
-            docker load -i ~/images/frontend-image.tar.gz &&
-            docker run -d -p 80:4173 \
-              --name frontend-container frontend-image
+            - name: Parar, remover e rodar o frontend
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.VM_IP }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  password: ${{ secrets.SSH_PASSWORD }}
+                  port: 22
+                  script: |
+                      docker stop frontend-container || true &&
+                      docker rm frontend-container || true &&
+                      docker rmi frontend-image || true &&
+                      docker load -i /techcommerce/docker-images/frontend-image.tar.gz &&
+                      docker run -d -p 80:4173 \
+                      --name frontend-container frontend-image

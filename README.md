@@ -154,6 +154,7 @@ Nós usamos o [Git](https://git-scm.com/) para controle de versão.
 * **Carlos Eduardo Martins dos Santos** - *Desenvolvimento Back-End e Testes de Sistema* - [Estagiário de Desenvolvimento](http://linkedin.com/in/carloseedu)
 * **Murilo Vieira** - *Documentação* - [Programador I](https://www.linkedin.com/in/murilo-augusto-vieira-957aab202/)
 * **Nathan Ferreira** - *Desenvolvimento Back-End, Desenvolvimento Front-End e Testes Unitários* - [Auxiliar de Gestão de Informática](https://www.linkedin.com/in/nathan-ferreira-97a355231/)
+* **Otávio Augusto Reis Almeida** - *Desenvolvimento Back-End* - [Desenvolvedor C#](https://www.linkedin.com/in/otavio-augusto-a0a71b225/)
 * **Thiago Nobre** - *Análise de Requisitos e Documentação* - [Atendente de SAC](https://www.linkedin.com/in/tiagonobre-/)
 * **Vinicius Sales** - *Documentação* - [Estagiário em Planejamento B2C/VP Négocios](https://www.linkedin.com/in/vinisl/)
 

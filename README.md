@@ -98,30 +98,23 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
       ```bash
       server {
         listen 80;
-          server_name _;
-      
-          # Redireciona requisições para o servidor caseiro via Tailscale
-          location /techcommerce/images/ {
-              proxy_pass http://{VM_IP}{DIRECTORY_SERVER_IMAGES};  # IP da máquina virtual + o diretório pai onde ficará salvo as imagens
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-      
-              # Habilitar a listagem de diretórios
-              autoindex on;
-              autoindex_exact_size off;
-              autoindex_localtime on;
-          }
-      
-          # Redireciona todas as outras requisições para o contêiner da aplicação
-          location / {
-              proxy_pass http://frontend-container:4173;  # Nome do contêiner da aplicação e a porta mapeada
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-          }
+        server_name _;
+    
+        location {DIRECTORY_SERVER_IMAGES} {
+            alias {DIRECTORY_SERVER_IMAGES};  # Caminho físico do servidor, o mesmo que foi setado na action
+            autoindex on;  # Habilita a listagem de diretórios para visualização das imagens
+            autoindex_exact_size off;
+            autoindex_localtime on;
+        }
+    
+        # Redireciona todas as outras requisições para o contêiner da aplicação
+        location / {
+            proxy_pass http://frontend-container:4173;  # Nome do contêiner da aplicação e a porta mapeada
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
       }
   - Instale o [Nginx](https://nginx.org/en/) através do Docker:
     ```bash

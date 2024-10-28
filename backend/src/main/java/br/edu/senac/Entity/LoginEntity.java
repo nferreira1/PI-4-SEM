@@ -20,11 +20,11 @@ public class LoginEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotNull(message = "O endereço email não pode ser nulo.")
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotNull(message = "A senha não pode ser nulo.")
     private String senha;
 
@@ -32,7 +32,7 @@ public class LoginEntity {
     @NotNull(message = "O endereço principal não pode ser nulo.")
     private boolean status;
 
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
-    private ClienteEntity cliente;
+    private ClienteEntity clienteEntity;
 }

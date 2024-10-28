@@ -42,7 +42,7 @@ public class EnderecoEntity {
     @NotBlank(message = "O bairro não pode ser nulo e nem vazio.")
     private String bairro;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "CHAR(8)", length = 8)
     @NotBlank(message = "O CEP não pode ser nulo e nem vazio.")
     private String cep;
 
@@ -50,7 +50,7 @@ public class EnderecoEntity {
     @NotBlank(message = "A cidade não pode ser nulo e nem vazio.")
     private String cidade;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "CHAR(2)", length = 2)
     @NotBlank(message = "O estado não pode ser nulo e nem vazio.")
     @Size(min = 2, max = 2, message = "O estado deve ter no mínimo e no máximo 2 caracteres.")
     private String UF;

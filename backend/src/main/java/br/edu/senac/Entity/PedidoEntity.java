@@ -31,9 +31,8 @@ public class PedidoEntity {
     @NotNull(message = "O ID do cliente não pode ser nulo.")
     private ClienteEntity clienteEntity;
 
-
     @OneToMany(mappedBy = "pedidoEntity", cascade = CascadeType.ALL)
-    private List<PedidoItensEntity> pedidosItens = new ArrayList<PedidoItensEntity>() ;
+    private List<PedidoItensEntity> pedidosItens = new ArrayList<PedidoItensEntity>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pagamento_id", nullable = false)

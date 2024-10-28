@@ -21,10 +21,6 @@ public class PedidoItensEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pedido_id", nullable = false)
-    private PedidoEntity pedidoEntity;
-
     @Column(nullable = false)
     @NotBlank(message = "O nome do produto não pode ser nulo e nem vazio.")
     private String nome;
@@ -43,6 +39,11 @@ public class PedidoItensEntity {
     private double valor;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "produto_id", nullable = false)
     private ProdutoEntity produtoEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pedido_id", nullable = false)
+    private PedidoEntity pedidoEntity;
 
 }

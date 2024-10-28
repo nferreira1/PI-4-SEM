@@ -33,7 +33,7 @@ public class ClienteEntity {
     @NotBlank(message = "O e-mail não pode ser nulo e nem vazio.")
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, columnDefinition = "CHAR(11)", length = 11)
     @Pattern(regexp = "\\d{11}", message = "O CPF deve ter no mínimo 11 caracteres.")
     @NotBlank(message = "O CPF não pode ser nulo e nem vazio.")
     private String cpf;
@@ -53,7 +53,7 @@ public class ClienteEntity {
     private List<PedidoEntity> pedidoEntities = new ArrayList<PedidoEntity>();
 
     @JsonIgnore
-    @OneToOne(mappedBy = "cliente")
+    @OneToOne(mappedBy = "clienteEntity", cascade = CascadeType.ALL)
     private LoginEntity loginEntity;
 
 }

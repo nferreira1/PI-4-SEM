@@ -56,4 +56,7 @@ public class ClienteEntity {
     @OneToOne(mappedBy = "clienteEntity", cascade = CascadeType.ALL)
     private LoginEntity loginEntity;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "clienteEntity", cascade = CascadeType.ALL)
+    private CarrinhoEntity carrinhoEntity;
 }

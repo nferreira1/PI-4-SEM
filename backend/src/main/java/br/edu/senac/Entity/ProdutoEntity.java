@@ -54,4 +54,10 @@ public class ProdutoEntity {
     @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL)
     private List<PedidoItensEntity> pedidoItensEntities = new ArrayList<PedidoItensEntity>();
 
+    @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CarrinhoProdutoEntity> carrinhoProduto;
+
+    public void AdicionarCarrinho(CarrinhoProdutoEntity carrinhoProduto) {
+        this.carrinhoProduto.add(carrinhoProduto);
+    }
 }

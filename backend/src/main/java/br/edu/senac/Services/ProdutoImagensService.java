@@ -12,6 +12,8 @@ import java.util.List;
 @Service
 public class ProdutoImagensService implements IServicePattern<ProdutoImagensEntity, Long> {
 
+
+    // Resolver
     @Autowired
     ProdutoImagensRepository produtoImagensRepository;
 

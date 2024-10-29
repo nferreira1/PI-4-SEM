@@ -1,6 +1,7 @@
 package br.edu.senac.Services;
 
 import br.edu.senac.Entity.EnderecoEntity;
+import br.edu.senac.Interfaces.IEndereco;
 import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EnderecoService implements IServicePattern<EnderecoEntity, Long> {
+public class EnderecoService implements IEndereco {
 
     @Autowired
     private EnderecoRepository enderecoRepository;

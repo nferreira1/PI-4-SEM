@@ -3,6 +3,7 @@ package br.edu.senac.Services;
 import br.edu.senac.DTO.LoginDTO;
 import br.edu.senac.Entity.ClienteEntity;
 import br.edu.senac.Entity.LoginEntity;
+import br.edu.senac.Interfaces.ILogin;
 import br.edu.senac.Repositories.LoginRepository;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
-public class LoginService {
+public class LoginService  implements ILogin {
 
     @Autowired
    private LoginRepository loginRepository;

@@ -4,7 +4,6 @@ import br.edu.senac.Annotations.ValidateBeforeExecutionAnnotation;
 import br.edu.senac.Entity.ProdutoEntity;
 import br.edu.senac.Exceptions.ErrorResponseException;
 import br.edu.senac.Interfaces.IProduto;
-import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.ProdutoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

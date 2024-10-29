@@ -2,7 +2,7 @@ package br.edu.senac.Pattern;
 
 import java.util.List;
 
-public interface IServicePattern<T, U> {
+public interface IRepositoryGeneric<T, U>  {
 
     List<T> findAll();
 

@@ -2,7 +2,7 @@ package br.edu.senac.Services;
 
 import br.edu.senac.Entity.ClienteEntity;
 import br.edu.senac.Exceptions.ErrorResponseException;
-import br.edu.senac.Pattern.IServicePattern;
+import br.edu.senac.Pattern.IRepositoryGeneric;
 import br.edu.senac.Repositories.ClienteRepository;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ClienteService implements IServicePattern<ClienteEntity, Long> {
+public class ClienteService implements IRepositoryGeneric<ClienteEntity, Long> {
 
     @Autowired
     private ClienteRepository clienteRepository;

@@ -2,7 +2,6 @@ package br.edu.senac.Services;
 
 import br.edu.senac.Entity.EnderecoEntity;
 import br.edu.senac.Interfaces.IEndereco;
-import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

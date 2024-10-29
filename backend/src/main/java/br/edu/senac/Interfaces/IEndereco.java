@@ -1,8 +1,7 @@
 package br.edu.senac.Interfaces;
 
-import br.edu.senac.Entity.CategoriaEntity;
 import br.edu.senac.Entity.EnderecoEntity;
-import br.edu.senac.Pattern.IServicePattern;
+import br.edu.senac.Pattern.IRepositoryGeneric;
 
-public interface IEndereco extends IServicePattern<EnderecoEntity, Long> {
+public interface IEndereco extends IRepositoryGeneric<EnderecoEntity, Long> {
 }

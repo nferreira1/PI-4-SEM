@@ -1,7 +1,7 @@
 package br.edu.senac.Interfaces;
 
 import br.edu.senac.Entity.ClienteEntity;
-import br.edu.senac.Pattern.IServicePattern;
+import br.edu.senac.Pattern.IRepositoryGeneric;
 
-public interface ICliente extends IServicePattern<ClienteEntity, Long> {
+public interface ICliente extends IRepositoryGeneric<ClienteEntity, Long> {
 }

@@ -1,7 +1,10 @@
 package br.edu.senac.Interfaces;
 
-import br.edu.senac.Entity.CategoriaEntity;
-import br.edu.senac.Pattern.IServicePattern;
+import br.edu.senac.Entity.CarrinhoEntity;
+import br.edu.senac.Entity.CarrinhoProdutoEntity;
+import br.edu.senac.Pattern.IRepositoryGeneric;
 
-public interface ICarrinho extends IServicePattern<CategoriaEntity, Long> {
+public interface ICarrinho extends IRepositoryGeneric<CarrinhoEntity, Long>
+{
+
 }

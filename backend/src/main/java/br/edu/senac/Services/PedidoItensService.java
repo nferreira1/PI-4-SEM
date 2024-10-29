@@ -1,9 +1,7 @@
 package br.edu.senac.Services;
 
-import br.edu.senac.Entity.PedidoEntity;
 import br.edu.senac.Entity.PedidoItensEntity;
 import br.edu.senac.Interfaces.IPedidoItem;
-import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

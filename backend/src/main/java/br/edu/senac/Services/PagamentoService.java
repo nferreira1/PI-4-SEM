@@ -2,7 +2,6 @@ package br.edu.senac.Services;
 
 import br.edu.senac.Entity.PagamentoEntity;
 import br.edu.senac.Interfaces.IPagamento;
-import br.edu.senac.Pattern.IServicePattern;
 import br.edu.senac.Repositories.PagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

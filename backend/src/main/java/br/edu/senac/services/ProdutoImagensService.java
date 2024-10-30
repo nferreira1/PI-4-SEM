@@ -1,7 +1,7 @@
 package br.edu.senac.services;
 
 import br.edu.senac.entity.ProdutoImagensEntity;
-import br.edu.senac.patterns.IRepositoryGeneric;
+import br.edu.senac.patterns.IServiceGeneric;
 import br.edu.senac.repositories.ProdutoImagensRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ProdutoImagensService implements IRepositoryGeneric<ProdutoImagensEntity, Long> {
-
+public class ProdutoImagensService implements IServiceGeneric<ProdutoImagensEntity, Long> {
 
     // Resolver
     @Autowired

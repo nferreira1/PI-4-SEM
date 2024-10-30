@@ -1,8 +1,8 @@
 package br.edu.senac.interfaces;
 
 import br.edu.senac.entity.CarrinhoEntity;
-import br.edu.senac.patterns.IRepositoryGeneric;
+import br.edu.senac.patterns.IServiceGeneric;
 
-public interface ICarrinho extends IRepositoryGeneric<CarrinhoEntity, Long> {
+public interface ICarrinho extends IServiceGeneric<CarrinhoEntity, Long> {
 
 }

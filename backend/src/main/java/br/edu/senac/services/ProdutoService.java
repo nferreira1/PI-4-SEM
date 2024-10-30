@@ -3,11 +3,11 @@ package br.edu.senac.services;
 import br.edu.senac.annotations.ValidateBeforeExecutionAnnotation;
 import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
-import br.edu.senac.interfaces.IProduto;
+import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.ProdutoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class ProdutoService implements IProduto {
+public class ProdutoService extends ServiceGeneric<ProdutoEntity, Long> {
 
     @Autowired
     private CategoriaService categoriaService;
@@ -28,24 +28,13 @@ public class ProdutoService implements IProduto {
     @Autowired
     private ImageManagerService imageManagerService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    public ProdutoService(JpaRepository<ProdutoEntity, Long> repository) {
+        super(repository);
+    }
 
     public List<ProdutoEntity> findByCategoriaEntityId(Long id) {
         this.categoriaService.findById(id);
         return this.produtoRepository.findByCategoriaEntityId(id);
-    }
-
-    @Override
-    public List<ProdutoEntity> findAll() {
-        return this.produtoRepository.findAll();
-    }
-
-    @Override
-    public ProdutoEntity findById(Long id) {
-        return this.produtoRepository.findById(id).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Produto não encontrado.")
-        );
     }
 
     @Override

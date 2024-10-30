@@ -4,16 +4,16 @@ import br.edu.senac.annotations.ValidateBeforeExecutionAnnotation;
 import br.edu.senac.entity.CategoriaEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
 import br.edu.senac.interfaces.ICategoria;
+import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
-public class CategoriaService implements ICategoria {
+public class CategoriaService extends ServiceGeneric<CategoriaEntity, Long> implements ICategoria {
 
     @Autowired
     private CategoriaRepository categoriarepository;
@@ -21,16 +21,8 @@ public class CategoriaService implements ICategoria {
     @Autowired
     private ImageManagerService imageManagerService;
 
-    @Override
-    public List<CategoriaEntity> findAll() {
-        return this.categoriarepository.findAll();
-    }
-
-    @Override
-    public CategoriaEntity findById(Long id) {
-        return this.categoriarepository.findById(id).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Categoria não encontrada.")
-        );
+    public CategoriaService(JpaRepository<CategoriaEntity, Long> repository) {
+        super(repository);
     }
 
     @Override

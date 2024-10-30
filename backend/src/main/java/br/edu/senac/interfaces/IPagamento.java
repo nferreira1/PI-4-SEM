@@ -1,7 +1,7 @@
 package br.edu.senac.interfaces;
 
 import br.edu.senac.entity.PagamentoEntity;
-import br.edu.senac.patterns.IRepositoryGeneric;
+import br.edu.senac.patterns.IServiceGeneric;
 
-public interface IPagamento extends IRepositoryGeneric<PagamentoEntity, Long> {
+public interface IPagamento extends IServiceGeneric<PagamentoEntity, Long> {
 }

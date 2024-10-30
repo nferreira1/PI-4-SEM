@@ -14,8 +14,8 @@ export function Produto({
 			href={`/produtos/${produto.id}`}
 			className="inline-block"
 		>
-			<div className="flex h-52 w-40 flex-col lg:h-60 lg:w-44">
-				<div className="relative flex grow items-center justify-center rounded-md bg-muted">
+			<div className="flex h-60 w-40 flex-col lg:h-64 lg:w-44">
+				<div className="relative flex aspect-square grow items-center justify-center rounded-md bg-muted">
 					<div className="absolute left-1.5 top-1.5 flex items-center gap-1 rounded-2xl bg-primary px-2 py-1.5">
 						<MoveDown size={14} strokeWidth={3} />
 						<span className="text-xs font-semibold">55%</span>
@@ -32,7 +32,7 @@ export function Produto({
 						className="object-contain"
 					/>
 				</div>
-				<div className="flex h-2/6 flex-col space-y-0.5 pt-2">
+				<div className="flex flex-col space-y-0.5 pt-2">
 					<span className="truncate text-xs lg:text-sm">
 						{produto.nome}
 					</span>
@@ -49,7 +49,6 @@ export function Produto({
 							<Star
 								key={index}
 								size={15}
-								data-last={index === 4}
 								className="fill-primary text-primary data-[last=true]:fill-transparent"
 							/>
 						))}

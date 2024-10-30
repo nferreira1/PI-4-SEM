@@ -58,7 +58,6 @@ export default async function Page({
 								<Star
 									key={index}
 									size={15}
-									data-last={index === 4}
 									className="fill-primary text-primary data-[last=true]:fill-transparent"
 								/>
 							))}

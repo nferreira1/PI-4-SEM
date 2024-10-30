@@ -19,8 +19,7 @@ export default async function Loading() {
 							<Star
 								key={index}
 								size={16}
-								data-last={index === 4}
-								className="rounded-md fill-primary/10"
+								className="rounded-md fill-primary/10 text-primary/10"
 							/>
 						))}
 						<Skeleton className="ml-3 h-3 w-28" />
@@ -64,10 +63,7 @@ export default async function Loading() {
 
 				<div className="flex gap-6 overflow-hidden pt-4">
 					{Array.from({ length: 7 }).map(() => (
-						<div
-							key={Math.random()}
-							className="flex min-h-52 min-w-40 flex-col lg:min-h-60 lg:min-w-44"
-						>
+						<div className="flex min-h-60 min-w-40 flex-col lg:min-h-64 lg:min-w-44">
 							<Skeleton className="relative flex grow items-center justify-center rounded-md" />
 							<div className="flex h-2/6 flex-col space-y-1.5 pt-2">
 								<Skeleton className="h-4 w-10/12 lg:h-[14px]" />
@@ -81,8 +77,7 @@ export default async function Loading() {
 											<Star
 												key={index}
 												size={16}
-												data-last={index === 4}
-												className="animate-pulse rounded-md fill-primary/10"
+												className="animate-pulse rounded-md fill-primary/10 text-primary/10"
 											/>
 										),
 									)}

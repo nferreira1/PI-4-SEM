@@ -25,7 +25,6 @@ export default async function Loading() {
 											<Star
 												key={index}
 												size={16}
-												data-last={index === 4}
 												className="animate-pulse rounded-md fill-primary/10 text-primary/10"
 											/>
 										),

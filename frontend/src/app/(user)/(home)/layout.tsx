@@ -1,9 +1,16 @@
-import Image from "next/image";
+import { Footer } from "@/components/custom/footer";
+import { Header } from "@/components/custom/header";
 
 export default function UserLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return <main className="grow">{children}</main>;
+	return (
+		<>
+			<Header />
+			<main className="grow">{children}</main>
+			<Footer />
+		</>
+	);
 }

@@ -1,4 +1,4 @@
-import { Menu, ShoppingCart, User2 } from "lucide-react";
+import { ShoppingCart, User2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import {
@@ -13,25 +13,6 @@ export function Header() {
 	return (
 		<header className="border-b">
 			<div className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between px-5">
-				<Sheet>
-					<SheetTrigger asChild>
-						<Button
-							variant="outline"
-							size="icon"
-							className="inline-flex md:hidden"
-						>
-							<Menu size={20} />
-						</Button>
-					</SheetTrigger>
-					<SheetContent side="left">
-						<SheetHeader className="border-b">
-							<SheetTitle>Menu</SheetTitle>
-						</SheetHeader>
-
-						{/* ADICIONAR OPÇÕES DO MENU */}
-					</SheetContent>
-				</Sheet>
-
 				<Link href="/">
 					<h1 className="text-xl font-bold text-primary">
 						Tech
@@ -63,11 +44,7 @@ export function Header() {
 
 				<div className="flex gap-2">
 					<Link href="/login">
-						<Button
-							variant="outline"
-							size="icon"
-							className="hidden md:inline-flex"
-						>
+						<Button variant="outline" size="icon">
 							<User2 size={20} />
 						</Button>
 					</Link>

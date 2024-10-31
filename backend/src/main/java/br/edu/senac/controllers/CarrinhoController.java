@@ -1,9 +1,12 @@
 package br.edu.senac.controllers;
 
 import br.edu.senac.dto.CarrinhoDTO;
+import br.edu.senac.dto.ProdutoDTO;
 import br.edu.senac.entity.CarrinhoEntity;
 import br.edu.senac.entity.CarrinhoProdutoEntity;
+import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.interfaces.ICarrinho;
+import br.edu.senac.interfaces.IProduto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,33 +27,55 @@ public class CarrinhoController {
     @Autowired
     private ICarrinho carrinhoService;
 
-    @GetMapping(("/{id}"))
-    public ResponseEntity<CarrinhoDTO> getById(@PathVariable Long id) {
-        return ResponseEntity.ok()
-                .body(modelMapper
-                        .map(this.carrinhoService.findById(id), CarrinhoDTO.class));
+    @Autowired
+    public IProduto produtoService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CarrinhoDTO> getId(@PathVariable Long id) {
+        CarrinhoEntity carrinho = carrinhoService.findById(id);
+
+        return ResponseEntity.ok(modelMapper.map(carrinho, CarrinhoDTO.class));
+
     }
 
+    //Acessando a página pela primeira vez
     @PostMapping
-    public ResponseEntity<CarrinhoDTO> post(CarrinhoDTO object) {
-        var carrinho = modelMapper.map(object, CarrinhoEntity.class);
+    public ResponseEntity<CarrinhoDTO> post(@RequestBody CarrinhoDTO carrinhoDTO) {
+
+        CarrinhoEntity carrinho = modelMapper.map(carrinhoDTO, CarrinhoEntity.class);
+
+        CarrinhoEntity novoCarrinho = carrinhoService.insert(carrinho);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(carrinho
-                        .getId()).toUri();
+                .buildAndExpand(novoCarrinho.getId()).toUri();
 
-        CarrinhoProdutoEntity n1 = new CarrinhoProdutoEntity();
-        carrinho.AdicionarCarrinho(n1);
-
-        this.carrinhoService.insert(carrinho);
-        return ResponseEntity.created(uri).body(modelMapper.map(carrinho, CarrinhoDTO.class));
+        return ResponseEntity.created(uri).body(modelMapper.map(novoCarrinho, CarrinhoDTO.class));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> delete(Long id) {
-        return null;
+    @PostMapping("/{carrinhoId}/produtos")
+    public ResponseEntity<CarrinhoDTO> adicionarProduto(@PathVariable Long carrinhoId, @RequestBody ProdutoDTO produtoDTO) {
+
+        ProdutoEntity produtoEntity = modelMapper.map(produtoService.findById(produtoDTO.getId()), ProdutoEntity.class);
+
+        CarrinhoEntity carrinho = carrinhoService.findById(carrinhoId);
+
+        carrinho.adicionarProduto(produtoEntity, carrinho.getQuantidade());
+
+        carrinhoService.update(carrinhoId ,carrinho);
+
+        return ResponseEntity.ok(modelMapper.map(carrinho, CarrinhoDTO.class));
+    }
+
+    @DeleteMapping("/{carrinhoId}/produtos/{produtoId}")
+    public ResponseEntity<Void> removerProduto(@PathVariable Long carrinhoId, @PathVariable Long produtoId) {
+        CarrinhoEntity carrinho = carrinhoService.findById(carrinhoId);
+        carrinho.removerProduto(produtoId);
+
+        carrinhoService.update(carrinho.getId(),carrinho);
+
+        return ResponseEntity.ok().build();
     }
 }
 

@@ -3,6 +3,7 @@ package br.edu.senac.services;
 import br.edu.senac.annotations.ValidateBeforeExecutionAnnotation;
 import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
+import br.edu.senac.interfaces.IProduto;
 import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.ProdutoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class ProdutoService extends ServiceGeneric<ProdutoEntity, Long> {
+public class ProdutoService extends ServiceGeneric<ProdutoEntity, Long> implements IProduto {
 
     @Autowired
     private CategoriaService categoriaService;

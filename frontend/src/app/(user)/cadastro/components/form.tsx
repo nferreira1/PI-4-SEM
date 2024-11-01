@@ -112,7 +112,7 @@ export function Form() {
 				<FormField label="Senha *" error={state?.validation?.senha}>
 					<FormControl>
 						<Input
-							type="text"
+							type="password"
 							name="senha"
 							placeholder="••••••••"
 						/>
@@ -125,7 +125,7 @@ export function Form() {
 				>
 					<FormControl>
 						<Input
-							type="text"
+							type="password"
 							name="confirmarSenha"
 							placeholder="••••••••"
 						/>

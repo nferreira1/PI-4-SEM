@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { api } from "@/lib/api";
 import { formatNumber } from "@/lib/utils";
-import { validateSchema } from "@/lib/validate-schema";
+import { validateSchema } from "@/lib/validation";
 import { ChevronLeft, ChevronRight, Star, Truck } from "lucide-react";
 import { z } from "zod";
 import { Imagem } from "./components/imagem";
@@ -23,13 +23,15 @@ export default async function Page({
 		produtoId: z.coerce.number(),
 	});
 
-	const { result } = validateSchema(schema, params);
+	const { data, success } = validateSchema(schema, params);
+
+	if (!success) throw new Error("Produto não encontrado.");
 
 	const [{ data: dataProduto }, { data: dataProdutos }] = await Promise.all([
 		api.GET("/produto/{produtoId}", {
 			params: {
 				path: {
-					produtoId: result.produtoId,
+					produtoId: data.produtoId,
 				},
 			},
 		}),

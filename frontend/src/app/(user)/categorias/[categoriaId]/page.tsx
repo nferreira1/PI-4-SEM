@@ -1,6 +1,6 @@
 import { Produto } from "@/components/custom/produto";
 import { api } from "@/lib/api";
-import { validateSchema } from "@/lib/validate-schema";
+import { validateSchema } from "@/lib/validation";
 import { z } from "zod";
 
 export default async function Page({
@@ -16,21 +16,23 @@ export default async function Page({
 		}),
 	});
 
-	const { result } = validateSchema(schema, params);
+	const { data, success } = validateSchema(schema, params);
+
+	if (!success) throw new Error("Categoria não encontrada.");
 
 	const [{ data: dataCategorias }, { data: dataProdutos }] =
 		await Promise.all([
 			await api.GET("/categoria/{categoriaId}", {
 				params: {
 					path: {
-						categoriaId: result.categoriaId,
+						categoriaId: data.categoriaId,
 					},
 				},
 			}),
 			await api.GET("/produto/categoria/{categoriaId}/produtos", {
 				params: {
 					path: {
-						categoriaId: result.categoriaId,
+						categoriaId: data.categoriaId,
 					},
 				},
 				cache: "no-cache",

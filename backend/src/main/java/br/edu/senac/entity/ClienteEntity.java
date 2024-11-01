@@ -29,7 +29,7 @@ public class ClienteEntity {
     private String nome;
 
     @Column(nullable = false, unique = true)
-    @Email(message = "O e-mail é deve ter um formato válido.")
+    @Email(message = "O e-mail deve ter um formato válido.")
     @NotBlank(message = "O e-mail não pode ser nulo e nem vazio.")
     private String email;
 

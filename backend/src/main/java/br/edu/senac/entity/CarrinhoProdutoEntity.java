@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "carrinho_produto")
+@Table(name = "carrinhos_produtos")
 @Entity(name = "CarrinhoProduto")
 @Getter
 @Setter

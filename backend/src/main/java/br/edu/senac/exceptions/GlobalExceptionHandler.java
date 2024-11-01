@@ -3,6 +3,7 @@ package br.edu.senac.exceptions;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,24 +27,55 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
 
-        ErrorResponseException errorResponse = new ErrorResponseException(HttpStatus.UNPROCESSABLE_ENTITY, "Erro de validação.");
+        ErrorResponseException errorResponseException = new ErrorResponseException(HttpStatus.UNPROCESSABLE_ENTITY, "Erro de validação.");
 
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            errorResponse.addError(violation.getPropertyPath().toString(), violation.getMessage());
+            errorResponseException.addError(violation.getPropertyPath().toString(), violation.getMessage());
         }
 
-        return buildErrorResponse(errorResponse);
+        return buildErrorResponse(errorResponseException);
     }
 
-    //FIXME Precisamos descobrir uma forma de retornar qual tipo de valor ta duplicado
-//    @ExceptionHandler(DataIntegrityViolationException.class)
-//    protected  ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
-//        ErrorResponseException errorResponseException = new ErrorResponseException(HttpStatus.CONFLICT, ex.);
-//
-//    }
-//    // COLOCAR EM PRODUÇÃO
-//    @ExceptionHandler(Throwable.class)
-//    protected ResponseEntity<Object> handleException(ErrorResponseException ex) {
-//        return buildErrorResponse(ex);
-//    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ErrorResponseException errorResponseException = new ErrorResponseException(
+                HttpStatus.CONFLICT,
+                "Erro de integridade de dados."
+        );
+
+        for (Throwable cause = ex.getCause(); cause != null; cause = cause.getCause()) {
+            String message = cause.getMessage();
+
+            if (message != null && message.contains("Key (")) {
+                String fieldName = "campo desconhecido";
+                String customMessage = "Registro duplicado.";
+
+                int startIndex = message.indexOf("Key (") + 5;
+                int endIndex = message.indexOf(")=", startIndex);
+
+                if (startIndex > 0 && endIndex > startIndex) {
+                    fieldName = message.substring(startIndex, endIndex);
+
+                    int valueStartIndex = message.indexOf("=(", endIndex) + 2;
+                    int valueEndIndex = message.indexOf(")", valueStartIndex);
+                    String duplicateValue = message.substring(valueStartIndex, valueEndIndex);
+
+                    customMessage = String.format("O %s '%s' já está cadastrado no sistema.", fieldName, duplicateValue);
+                }
+
+                errorResponseException.addError(fieldName, customMessage);
+
+                break;
+            }
+        }
+
+        return buildErrorResponse(errorResponseException);
+    }
+
+    // COLOCAR EM PRODUÇÃO
+    @ExceptionHandler(Throwable.class)
+    protected ResponseEntity<Object> handleException(Throwable ex) {
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro inesperado."));
+    }
+
 }

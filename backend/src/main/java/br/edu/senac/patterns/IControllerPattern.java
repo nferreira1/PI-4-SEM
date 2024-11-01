@@ -28,6 +28,7 @@ public interface IControllerPattern<T, U> {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201"),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "422", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })
@@ -36,6 +37,7 @@ public interface IControllerPattern<T, U> {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "422", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })

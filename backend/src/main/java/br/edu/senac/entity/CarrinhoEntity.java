@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Table(name = "carrinho")
+@Table(name = "carrinhos")
 @Entity(name = "Carrinho")
 @Getter
 @Setter
@@ -40,6 +40,6 @@ public class CarrinhoEntity {
     }
 
     public void removerProduto(Long produtoId) {
-        this.carrinhoProduto.removeIf(c-> c.getProdutoEntity().getId() == produtoId);
+        this.carrinhoProduto.removeIf(c -> c.getProdutoEntity().getId() == produtoId);
     }
 }

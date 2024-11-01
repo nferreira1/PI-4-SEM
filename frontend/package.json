@@ -21,6 +21,7 @@
 		"@radix-ui/react-dialog": "^1.1.2",
 		"@radix-ui/react-icons": "^1.3.0",
 		"@radix-ui/react-label": "^2.1.0",
+		"@radix-ui/react-select": "^2.1.2",
 		"@radix-ui/react-separator": "^1.1.0",
 		"@radix-ui/react-slot": "^1.1.0",
 		"class-variance-authority": "^0.7.0",
@@ -28,10 +29,10 @@
 		"embla-carousel-auto-scroll": "^8.3.0",
 		"embla-carousel-react": "^8.3.0",
 		"lucide-react": "^0.451.0",
-		"next": "14.2.15",
+		"next": "^15.0.0-rc.1",
 		"openapi-fetch": "^0.12.2",
-		"react": "^18",
-		"react-dom": "^18",
+		"react": "^19.0.0-rc-603e6108-20241029",
+		"react-dom": "^19.0.0-rc-603e6108-20241029",
 		"tailwind-merge": "^2.5.3",
 		"tailwindcss-animate": "^1.0.7",
 		"zod": "^3.23.8"
@@ -50,5 +51,8 @@
 		"prettier-plugin-tailwindcss": "^0.6.8",
 		"tailwindcss": "^3.4.1",
 		"typescript": "^5"
+	},
+	"overrides": {
+		"react-is": "^19.0.0-rc-69d4b800-20241021"
 	}
 }

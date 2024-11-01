@@ -1,59 +1,112 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
-import React, { useId, useState } from "react";
+import { Label as UILabel } from "@/components/ui/label";
+import React, { createContext, useContext, useId } from "react";
+
+type FormFieldContextValue = {
+	id: string;
+	name?: string;
+	error?: string[];
+};
+
+const FormFieldContext = createContext<FormFieldContextValue | undefined>(
+	undefined,
+);
+
+const useFormFieldContext = () => {
+	const context = useContext(FormFieldContext);
+	if (!context) {
+		throw new Error("useFormFieldContext must be used within a FormField");
+	}
+	return context;
+};
 
 export function FormField({
 	label,
-	type,
-	required,
+	error,
+	children,
 	...props
-}: React.InputHTMLAttributes<HTMLInputElement> & {
+}: React.HtmlHTMLAttributes<HTMLDivElement> & {
 	label: string;
-	type: React.InputHTMLAttributes<HTMLInputElement>["type"];
-	required?: boolean;
+	error?: string[];
+	children: React.ReactElement;
 }) {
-	const [password, setPassword] = useState<typeof type>("password");
 	const id = useId();
-
-	if (type === "password") {
-		const handlePassword = () =>
-			setPassword((prev) => (prev === "password" ? "text" : "password"));
-
-		return (
-			<div className="grid gap-2">
-				<Label htmlFor={id}>
-					{label} {required && "*"}
-				</Label>
-				<div className="relative flex items-center justify-end">
-					<Input id={id} type={password} placeholder="••••••••" />
-					<Button
-						type="button"
-						size="icon"
-						variant="ghost"
-						className="absolute right-0"
-						onClick={handlePassword}
-					>
-						{password === "password" ? (
-							<Eye size={20} />
-						) : (
-							<EyeOff size={20} />
-						)}
-					</Button>
-				</div>
-			</div>
-		);
-	}
+	const childName = (
+		children.props as React.InputHTMLAttributes<HTMLInputElement>
+	).name;
 
 	return (
-		<div className="grid gap-2">
-			<Label htmlFor={id}>
-				{label} {required && "*"}
-			</Label>
-			<Input id={id} required={required} {...props} />
+		<FormFieldContext.Provider value={{ id, name: childName, error }}>
+			<div {...props}>
+				<div className="space-y-1.5">
+					<FormLabel>{label}</FormLabel>
+					<FormControl>{children}</FormControl>
+				</div>
+				<FormMessage />
+			</div>
+		</FormFieldContext.Provider>
+	);
+}
+
+export function FormLabel({ children }: { children: React.ReactNode }) {
+	const { id } = useFormFieldContext();
+	return <UILabel htmlFor={id}>{children}</UILabel>;
+}
+
+export function FormControl({ children }: { children: React.ReactNode }) {
+	const { id, error } = useFormFieldContext();
+
+	return React.cloneElement(children as React.ReactElement, {
+		id,
+		"aria-describedby": error ? `${id}-error` : undefined,
+		"aria-invalid": !!error,
+		className: `data-[error=true]:border-destructive ${
+			(children as React.ReactElement).props.className || ""
+		}`,
+	});
+}
+
+export function FormMessage() {
+	const { error } = useFormFieldContext();
+	if (!error || error.length === 0) return null;
+
+	return (
+		<div>
+			{error.length > 1 ? (
+				<>
+					<p className="text-[0.8rem] font-medium text-destructive">
+						O campo deve atender aos seguintes requisitos:
+					</p>
+					<ul
+						aria-live="polite"
+						className="ml-2 list-inside list-disc text-xs font-medium text-destructive"
+					>
+						{error.map((err: string, index: number) => (
+							<li key={index}>{err}</li>
+						))}
+					</ul>
+				</>
+			) : (
+				<p
+					aria-live="polite"
+					className="text-[0.8rem] font-medium text-destructive"
+				>
+					{error[0]}
+				</p>
+			)}
 		</div>
+	);
+}
+
+export function FormDescription({ children }: { children: React.ReactNode }) {
+	const { id } = useFormFieldContext();
+	return (
+		<p
+			id={`${id}-description`}
+			className="text-[0.8rem] text-muted-foreground"
+		>
+			{children}
+		</p>
 	);
 }

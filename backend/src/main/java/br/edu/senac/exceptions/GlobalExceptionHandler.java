@@ -73,9 +73,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     // COLOCAR EM PRODUÇÃO
-    @ExceptionHandler(Throwable.class)
-    protected ResponseEntity<Object> handleException(Throwable ex) {
-        return buildErrorResponse(new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro inesperado."));
-    }
+//    @ExceptionHandler(Throwable.class)
+//    protected ResponseEntity<Object> handleException(Throwable ex) {
+//        return buildErrorResponse(new ErrorResponseException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro inesperado."));
+//    }
 
 }

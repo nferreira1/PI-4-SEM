@@ -40,11 +40,15 @@ public class ClienteEntity {
 
     @Column(nullable = false)
     @NotNull(message = "O status do cliente não pode ser nulo.")
-    private Boolean status = true;
+    private boolean status = true;
 
     @Column(nullable = false)
     @NotBlank(message = "O telefone não pode ser nulo e nem vazio.")
     private String telefone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "genero_id", nullable = false)
+    private GeneroEntity generoEntity;
 
     @OneToMany(mappedBy = "clienteEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EnderecoEntity> enderecoEntities = new ArrayList<EnderecoEntity>();

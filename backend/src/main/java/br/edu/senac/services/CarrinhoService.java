@@ -2,7 +2,6 @@ package br.edu.senac.services;
 
 
 import br.edu.senac.entity.CarrinhoEntity;
-import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.interfaces.ICarrinho;
 import br.edu.senac.patterns.ServiceGeneric;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,9 +22,9 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
     @Override
     public void adicionarProduto(Long carrinhoId, Long produtoId, int quantidade) {
 
-        CarrinhoEntity carrinho = findById(carrinhoId);
+        var carrinho = findById(carrinhoId);
 
-        ProdutoEntity produto = produtoService.findById(produtoId);
+        var produto = produtoService.findById(produtoId);
 
         if (carrinho == null && produto == null) {
             throw new EntityNotFoundException("Carrinho ou Produto não encontrado.");
@@ -39,7 +38,6 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
     public void removerProduto(Long carrinhoId, Long produtoId) {
 
         CarrinhoEntity carrinho = findById(carrinhoId);
-
         if (carrinho != null) {
             throw new EntityNotFoundException("Carrinho não encontrado.");
         }
@@ -47,4 +45,5 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
         carrinho.removerProduto(produtoId);
         update(carrinho.getId(), carrinho);
     }
+
 }

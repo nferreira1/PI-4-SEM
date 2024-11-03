@@ -21,10 +21,14 @@ public abstract class ServiceGeneric<T, U> implements IServiceGeneric<T, U> {
 
     @Override
     public T findById(U id) {
+        String entityName = this.getClass().getSimpleName().replace("Service", "");
+        String message = entityName + " não encontrado.";
+        System.out.println(this.repository.findById(id));
         return this.repository.findById(id).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Registro não encontrado.")
+                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, message)
         );
     }
+
 
     @Override
     public T insert(T object) {

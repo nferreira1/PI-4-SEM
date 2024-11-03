@@ -3,7 +3,6 @@ package br.edu.senac.controllers;
 import br.edu.senac.dto.CarrinhoDTO;
 import br.edu.senac.dto.ProdutoDTO;
 import br.edu.senac.entity.CarrinhoEntity;
-import br.edu.senac.entity.CarrinhoProdutoEntity;
 import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.interfaces.ICarrinho;
 import br.edu.senac.interfaces.IProduto;
@@ -21,14 +20,13 @@ import java.net.URI;
 @RestController
 public class CarrinhoController {
 
+    public IProduto produtoService;
+
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private ICarrinho carrinhoService;
-
-    @Autowired
-    public IProduto produtoService;
 
     @GetMapping("/{id}")
     public ResponseEntity<CarrinhoDTO> getId(@PathVariable Long id) {
@@ -63,7 +61,7 @@ public class CarrinhoController {
 
         carrinho.adicionarProduto(produtoEntity, carrinho.getQuantidade());
 
-        carrinhoService.update(carrinhoId ,carrinho);
+        carrinhoService.update(carrinhoId, carrinho);
 
         return ResponseEntity.ok(modelMapper.map(carrinho, CarrinhoDTO.class));
     }
@@ -73,7 +71,7 @@ public class CarrinhoController {
         CarrinhoEntity carrinho = carrinhoService.findById(carrinhoId);
         carrinho.removerProduto(produtoId);
 
-        carrinhoService.update(carrinho.getId(),carrinho);
+        carrinhoService.update(carrinho.getId(), carrinho);
 
         return ResponseEntity.ok().build();
     }

@@ -3,7 +3,7 @@ package br.edu.senac.services;
 import br.edu.senac.annotations.ValidateBeforeExecutionAnnotation;
 import br.edu.senac.entity.CategoriaEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
-import br.edu.senac.interfaces.ICategoria;
+import br.edu.senac.patterns.IServiceGeneric;
 import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CategoriaService extends ServiceGeneric<CategoriaEntity, Long> implements ICategoria {
+public class CategoriaService extends ServiceGeneric<CategoriaEntity, Long> implements IServiceGeneric<CategoriaEntity, Long> {
 
     @Autowired
     private CategoriaRepository categoriarepository;

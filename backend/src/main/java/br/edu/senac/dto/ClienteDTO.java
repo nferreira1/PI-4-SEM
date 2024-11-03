@@ -20,5 +20,7 @@ public class ClienteDTO {
     private String telefone;
     private List<EnderecoDTO> endereco = new ArrayList<EnderecoDTO>();
     private String senha;
+    private boolean status;
+    private Long generoId;
 
 }

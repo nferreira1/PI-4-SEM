@@ -20,7 +20,7 @@ public class GeneroEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(30)")
     private String nome;
 
     @OneToMany(mappedBy = "generoEntity", cascade = CascadeType.ALL, orphanRemoval = true)

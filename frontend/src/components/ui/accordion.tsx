@@ -1,10 +1,11 @@
 "use client";
 
-import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+import { Card } from "./card";
 
 const Accordion = AccordionPrimitive.Root;
 
@@ -12,11 +13,13 @@ const AccordionItem = React.forwardRef<
 	React.ElementRef<typeof AccordionPrimitive.Item>,
 	React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-	<AccordionPrimitive.Item
-		ref={ref}
-		className={cn("border-b", className)}
-		{...props}
-	/>
+	<Card className="border-2 px-5">
+		<AccordionPrimitive.Item
+			ref={ref}
+			className={cn(className)}
+			{...props}
+		/>
+	</Card>
 ));
 AccordionItem.displayName = "AccordionItem";
 
@@ -28,13 +31,17 @@ const AccordionTrigger = React.forwardRef<
 		<AccordionPrimitive.Trigger
 			ref={ref}
 			className={cn(
-				"flex flex-1 items-center justify-between py-4 text-left text-sm font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+				"flex flex-1 items-center justify-between py-4 text-left text-sm font-medium transition-all [&[data-state=open]>svg]:rotate-180",
 				className,
 			)}
 			{...props}
 		>
 			{children}
-			<ChevronDownIcon className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+			<ChevronDown
+				className="shrink-0 text-primary transition-transform duration-200"
+				size={20}
+				strokeWidth={4}
+			/>
 		</AccordionPrimitive.Trigger>
 	</AccordionPrimitive.Header>
 ));
@@ -54,4 +61,4 @@ const AccordionContent = React.forwardRef<
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger };

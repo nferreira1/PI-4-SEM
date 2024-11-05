@@ -5,9 +5,9 @@ import Link from "next/link";
 
 export function Produto({
 	produto,
-}: {
-	readonly produto: Schema["ProdutoDTO"];
-}) {
+}: Readonly<{
+	produto: Schema["ProdutoDTO"];
+}>) {
 	return (
 		<Link
 			key={produto.id}

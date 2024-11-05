@@ -1,6 +1,7 @@
 import { ShoppingCart, User2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 import {
 	Sheet,
 	SheetContent,
@@ -87,22 +88,22 @@ export function Header() {
 								</section>
 								<section className="flex grow flex-col justify-between">
 									<div className="grid gap-3 py-4 text-sm font-semibold text-muted-foreground">
-										<div className="h-0.5 bg-muted"></div>
+										<Separator className="h-0.5 rounded-sm" />
 										<span className="flex justify-between">
 											<span>Subtotal</span>
 											<span>R$ 1.000,00</span>
 										</span>
-										<div className="h-0.5 bg-muted"></div>
+										<Separator className="h-0.5 rounded-sm" />
 										<span className="flex justify-between">
 											<span>Entrega</span>
 											<span>GRÁTIS</span>
 										</span>
-										<div className="h-0.5 bg-muted"></div>
+										<Separator className="h-0.5 rounded-sm" />
 										<span className="flex justify-between">
 											<span>Descontos</span>
 											<span>- R$ 1.000,00</span>
 										</span>
-										<div className="h-0.5 bg-muted"></div>
+										<Separator className="h-0.5 rounded-sm" />
 										<span className="flex justify-between text-lg text-white">
 											<span>TOTAL</span>
 											<span>R$ 1.000,00</span>

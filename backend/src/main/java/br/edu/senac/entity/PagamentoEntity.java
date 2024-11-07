@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,11 +34,11 @@ public class PagamentoEntity {
     private Double valorPagamento;
 
     @OneToMany(mappedBy = "pagamentoEntity", cascade = CascadeType.ALL)
-    private List<PedidoEntity> pedidoEntity;
+    private List<PedidoEntity> pedidoEntity = new ArrayList<>();
 
     @Column(nullable = false)
     @NotNull(message = "O status do pagamento não pode ser Nulo")
     @Enumerated(EnumType.STRING)
-    private StatusPagamento statusPagamento;
+    private StatusPagamento statusPagamento = StatusPagamento.PENDENTE;
 
 }

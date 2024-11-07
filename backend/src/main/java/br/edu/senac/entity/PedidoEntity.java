@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class PedidoEntity {
 
     @Id
@@ -39,4 +38,15 @@ public class PedidoEntity {
     @JoinColumn(name = "pagamento_id", nullable = false)
     private PagamentoEntity pagamentoEntity;
 
+    public PedidoEntity(Long id, LocalDateTime dataCompra, ClienteEntity clienteEntity, PagamentoEntity pagamentoEntity) {
+        this.id = id;
+        this.dataCompra = dataCompra;
+        this.clienteEntity = clienteEntity;
+        this.pagamentoEntity = pagamentoEntity;
+    }
+
+    public void adicionarPedidoItem(PedidoItensEntity pedidoItens) {
+        pedidosItens.add(pedidoItens);
+    }
 }
+

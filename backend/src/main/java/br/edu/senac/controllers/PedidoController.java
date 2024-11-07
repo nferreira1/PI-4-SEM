@@ -4,6 +4,7 @@ import br.edu.senac.entity.PedidoEntity;
 import br.edu.senac.patterns.IControllerPattern;
 import br.edu.senac.services.CategoriaService;
 import br.edu.senac.services.PagamentoService;
+import br.edu.senac.services.PedidoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 @Tag(name = "Pedido")
 @RequestMapping("/pedido")
 @RestController
-public class PedidoController implements IControllerPattern<PedidoEntity, Long> {
+public class PedidoController  {
 
     @Autowired
     private ModelMapper modelMapper;
@@ -25,32 +26,9 @@ public class PedidoController implements IControllerPattern<PedidoEntity, Long> 
     private CategoriaService categoriaService;
 
     @Autowired
-    private PagamentoService pagamentoService;
 
-    @Override
-    public ResponseEntity<List<PedidoEntity>> getAll() {
-        return null;
-    }
+    private PedidoService pedidoService;
 
-    @Override
-    public ResponseEntity<PedidoEntity> getById(Long id) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<PedidoEntity> post(PedidoEntity object) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<PedidoEntity> put(Long id, PedidoEntity object) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> delete(Long id) {
-        return null;
-    }
 
 }
 

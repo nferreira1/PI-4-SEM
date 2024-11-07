@@ -5,21 +5,26 @@ import br.edu.senac.dto.ClienteDTO;
 import br.edu.senac.entity.CarrinhoEntity;
 import br.edu.senac.entity.CarrinhoProdutosEntity;
 import br.edu.senac.entity.ClienteEntity;
+import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
+import br.edu.senac.interfaces.ICarrinho;
 import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.CarrinhoProdutosRepository;
 import br.edu.senac.repositories.CarrinhoRepository;
 import br.edu.senac.repositories.ClienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> {
+public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implements ICarrinho {
 
     @Autowired
     private CarrinhoProdutosRepository carrinhoProdutosRepository;
@@ -63,6 +68,26 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> {
             carrinhoProdutos.setQuantidade(object.getQuantidade());
             return this.carrinhoProdutosRepository.save(carrinhoProdutos);
         }
+
+    }
+
+    @Override
+    public List<ProdutoEntity> carregarProdutosDoCarrinho (Long IdCarrinho) {
+        CarrinhoEntity carrinho = findById(IdCarrinho);
+
+        if(carrinho == null)
+        {
+            new EntityNotFoundException("Carrinho não encontrado");
+        }
+
+        List<ProdutoEntity> listProdutos = new ArrayList<>();
+        carrinho.getItens().forEach(carrinhoProduto -> listProdutos.add(produtoService.findById(carrinhoProduto.getProduto().getId())));
+
+        if(listProdutos.isEmpty()){
+            new ArrayList<>();
+        }
+
+        return listProdutos;
     }
 
     

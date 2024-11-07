@@ -1,5 +1,6 @@
 package br.edu.senac.services;
 
+import br.edu.senac.entity.CarrinhoEntity;
 import br.edu.senac.entity.ClienteEntity;
 import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.ClienteRepository;
@@ -13,6 +14,9 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private CarrinhoService carrinhoService;
 
     @Autowired
     private EnderecoService enderecoService;

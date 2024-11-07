@@ -1,79 +1,89 @@
 package br.edu.senac.controllers;
 
 import br.edu.senac.dto.CarrinhoDTO;
-import br.edu.senac.dto.ProdutoDTO;
+import br.edu.senac.dto.CarrinhoProdutosDTO;
+import br.edu.senac.dto.CarrinhoProdutosResponseDTO;
+import br.edu.senac.dto.CategoriaDTO;
 import br.edu.senac.entity.CarrinhoEntity;
-import br.edu.senac.entity.ProdutoEntity;
-import br.edu.senac.interfaces.ICarrinho;
-import br.edu.senac.interfaces.IProduto;
+import br.edu.senac.entity.CarrinhoProdutosEntity;
+import br.edu.senac.exceptions.ErrorResponseException;
+import br.edu.senac.patterns.IControllerPattern;
+import br.edu.senac.services.CarrinhoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Tag(name = "Carrinho")
-@RequestMapping("/carrinho")
 @RestController
-public class CarrinhoController {
+@RequestMapping("/carrinho")
+public class CarrinhoController implements IControllerPattern<CarrinhoProdutosDTO, Long> {
 
-    public IProduto produtoService;
+    @Autowired
+    private CarrinhoService carrinhoService;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private ICarrinho carrinhoService;
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CarrinhoDTO> getId(@PathVariable Long id) {
-        CarrinhoEntity carrinho = carrinhoService.findById(id);
-
-        return ResponseEntity.ok(modelMapper.map(carrinho, CarrinhoDTO.class));
-
+    @Override
+    public ResponseEntity<List<CarrinhoProdutosDTO>> getAll() {
+        return null;
     }
 
-    //Acessando a página pela primeira vez
+    @Override
+    public ResponseEntity<CarrinhoProdutosDTO> getById(Long id) {
+        return null;
+    }
+
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<List<CarrinhoProdutosResponseDTO>> getByClienteId(@PathVariable Long clienteId) {
+        var carrinhoRequest = this.carrinhoService.findByClienteId(clienteId)
+                .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
+
+        List<CarrinhoProdutosResponseDTO> carrinhoResponse = carrinhoRequest.getItens().stream()
+                .map(item -> modelMapper.map(item, CarrinhoProdutosResponseDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(carrinhoResponse);
+    }
+
+
+    @Override
     @PostMapping
-    public ResponseEntity<CarrinhoDTO> post(@RequestBody CarrinhoDTO carrinhoDTO) {
+    public ResponseEntity<CarrinhoProdutosDTO> post(@RequestBody CarrinhoProdutosDTO object) {
+        var carrinhoRequest = this.carrinhoService.insert(object);
 
-        CarrinhoEntity carrinho = modelMapper.map(carrinhoDTO, CarrinhoEntity.class);
+        if (carrinhoRequest == null) {
+            return ResponseEntity.noContent().build();
+        }
 
-        CarrinhoEntity novoCarrinho = carrinhoService.insert(carrinho);
+        this.modelMapper.typeMap(
+                CarrinhoProdutosEntity.class,
+                CarrinhoProdutosDTO.class
+        ).addMappings(mapper -> mapper.map(CarrinhoProdutosEntity::getId, CarrinhoProdutosDTO::setId));
 
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(novoCarrinho.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(modelMapper.map(novoCarrinho, CarrinhoDTO.class));
+        var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoProdutosDTO.class);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(carrinhoRequest.getId()).toUri();
+        return ResponseEntity.created(uri).body(carrinhoResponse);
     }
 
-    @PostMapping("/{carrinhoId}/produtos")
-    public ResponseEntity<CarrinhoDTO> adicionarProduto(@PathVariable Long carrinhoId, @RequestBody ProdutoDTO produtoDTO) {
-
-        ProdutoEntity produtoEntity = modelMapper.map(produtoService.findById(produtoDTO.getId()), ProdutoEntity.class);
-
-        CarrinhoEntity carrinho = carrinhoService.findById(carrinhoId);
-
-        carrinho.adicionarProduto(produtoEntity, carrinho.getQuantidade());
-
-        carrinhoService.update(carrinhoId, carrinho);
-
-        return ResponseEntity.ok(modelMapper.map(carrinho, CarrinhoDTO.class));
+    @Override
+    public ResponseEntity<CarrinhoProdutosDTO> put(Long id, CarrinhoProdutosDTO object) {
+        return null;
     }
 
-    @DeleteMapping("/{carrinhoId}/produtos/{produtoId}")
-    public ResponseEntity<Void> removerProduto(@PathVariable Long carrinhoId, @PathVariable Long produtoId) {
-        CarrinhoEntity carrinho = carrinhoService.findById(carrinhoId);
-        carrinho.removerProduto(produtoId);
-
-        carrinhoService.update(carrinho.getId(), carrinho);
-
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<Void> delete(Long id) {
+        return null;
     }
+
 }
-

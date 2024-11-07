@@ -1,5 +1,6 @@
 package br.edu.senac.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -51,13 +52,7 @@ public class ProdutoEntity {
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaEntity categoriaEntity;
 
-    @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoItensEntity> pedidoItensEntities = new ArrayList<PedidoItensEntity>();
 
-    @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarrinhoProdutoEntity> carrinhoProduto;
-
-    public void AdicionarCarrinho(CarrinhoProdutoEntity carrinhoProduto) {
-        this.carrinhoProduto.add(carrinhoProduto);
-    }
 }

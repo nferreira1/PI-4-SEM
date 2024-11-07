@@ -1,5 +1,6 @@
 package br.edu.senac.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class GeneroEntity {
     private String nome;
 
     @OneToMany(mappedBy = "generoEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<ClienteEntity> clienteEntity;
 
 }

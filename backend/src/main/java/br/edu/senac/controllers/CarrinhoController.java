@@ -47,7 +47,7 @@ public class CarrinhoController implements IControllerPattern<CarrinhoProdutosDT
     @GetMapping("/{clienteId}")
     public ResponseEntity<List<CarrinhoProdutosResponseDTO>> getByClienteId(@PathVariable Long clienteId) {
         var carrinhoRequest = this.carrinhoService.findByClienteId(clienteId)
-                .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Carrinho não encontrado."));
+                .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
 
         List<CarrinhoProdutosResponseDTO> carrinhoResponse = carrinhoRequest.getItens().stream()
                 .map(item -> modelMapper.map(item, CarrinhoProdutosResponseDTO.class))

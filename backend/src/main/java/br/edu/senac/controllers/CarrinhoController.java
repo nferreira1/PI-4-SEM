@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -50,12 +51,21 @@ public class CarrinhoController implements IControllerPattern<CarrinhoProdutosDT
                 .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado."));
 
         List<CarrinhoProdutosResponseDTO> carrinhoResponse = carrinhoRequest.getItens().stream()
+                .filter(item -> {
+                    boolean temEstoque = item.getProduto().getEstoque() > item.getQuantidade();
+                    this.carrinhoService.delete(item);
+                    if (!temEstoque) {
+                        item.setQuantidade(0);
+                        var carrinhoProdutosDTO = this.modelMapper.map(item, CarrinhoProdutosDTO.class);
+                        this.carrinhoService.insert(carrinhoProdutosDTO);
+                    }
+                    return temEstoque;
+                })
                 .map(item -> modelMapper.map(item, CarrinhoProdutosResponseDTO.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(carrinhoResponse);
     }
-
 
     @Override
     @PostMapping

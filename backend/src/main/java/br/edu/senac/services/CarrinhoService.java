@@ -48,6 +48,11 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
 
     public CarrinhoProdutosEntity insert(CarrinhoProdutosDTO object) {
         var produto = this.produtoService.findById(object.getProdutoId());
+
+        if (object.getQuantidade() > produto.getEstoque()) {
+            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "Produto sem estoque.");
+        }
+
         var cliente = this.clienteRepository.findById(object.getClienteId()).orElseThrow(
                 () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado.")
         );
@@ -59,7 +64,9 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
         var carrinhoProdutosOptional = this.carrinhoProdutosRepository.findByCarrinhoAndProduto(carrinho, produto);
 
         if (object.getQuantidade() <= 0) {
-            carrinhoProdutosOptional.ifPresent(carrinhoProdutos -> this.carrinhoProdutosRepository.delete(carrinhoProdutos));
+            carrinhoProdutosOptional.ifPresent(carrinhoProdutos -> {
+                this.carrinhoProdutosRepository.delete(carrinhoProdutos);
+            });
             return null;
         } else {
             var carrinhoProdutos = carrinhoProdutosOptional.orElse(new CarrinhoProdutosEntity());
@@ -68,7 +75,10 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
             carrinhoProdutos.setQuantidade(object.getQuantidade());
             return this.carrinhoProdutosRepository.save(carrinhoProdutos);
         }
+    }
 
+    public void delete(CarrinhoProdutosEntity object) {
+        this.carrinhoProdutosRepository.delete(object);
     }
 
     @Override

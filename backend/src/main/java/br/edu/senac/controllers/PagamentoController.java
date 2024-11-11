@@ -55,10 +55,11 @@ public class PagamentoController {
 
         if (pagamento.getStatusPagamento().equals(StatusPagamento.PENDENTE))
         {
-            //Arrumar Otavio
-          //  pedidoService.gerarPedidoItem(pedido.getId(), listProdutos, carrinho);
+             pedidoService.gerarPedidoItem(pedido,carrinho);
         }
+
         pagamento.setStatusPagamento(StatusPagamento.APROVADO);
+
         pagamento = pagamentoService.update(pagamento.getId(), pagamento);
 
         return ResponseEntity.created(uri).body(modelMapper.map(pagamento, PagamentoDTO.class));

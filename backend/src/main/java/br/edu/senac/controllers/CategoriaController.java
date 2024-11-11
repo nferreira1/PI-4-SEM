@@ -50,7 +50,7 @@ public class CategoriaController implements IControllerPattern<CategoriaDTO, Lon
 
     @Override
     @PostMapping
-    public ResponseEntity<CategoriaDTO> post(@RequestBody CategoriaDTO object) {
+    public ResponseEntity<CategoriaDTO > post(@RequestBody CategoriaDTO object) {
         var novaCategoria = this.categoriaService.insert(modelMapper.map(object, CategoriaEntity.class));
         var categoriaResponse = modelMapper.map(novaCategoria, CategoriaDTO.class);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoriaResponse.getId()).toUri();

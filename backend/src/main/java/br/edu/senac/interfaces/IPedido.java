@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface IPedido extends IServiceGeneric<PedidoEntity, Long>
 {
-   // void gerarPedidoItem(Long idPedido, List<ProdutoEntity> produtos, CarrinhoEntity carrinhoEntity);
-    List<ProdutoEntity> consultarProdutosPedido(Long idPedido);
+    void gerarPedidoItem(PedidoEntity pedido, CarrinhoEntity carrinhoEntity);
 }

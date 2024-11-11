@@ -35,7 +35,6 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
                 this.enderecoService.insert(endereco);
             });
         }
-
         return cliente;
     }
     

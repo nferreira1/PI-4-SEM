@@ -55,4 +55,7 @@ public class ProdutoEntity {
     @OneToMany(mappedBy = "produtoEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PedidoItensEntity> pedidoItensEntities = new ArrayList<PedidoItensEntity>();
 
+    public void adicionarPedidoItensEntity(PedidoItensEntity pedidoItensEntity) {
+        pedidoItensEntities.add(pedidoItensEntity);
+    }
 }

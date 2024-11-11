@@ -27,23 +27,13 @@ import java.util.stream.Collectors;
 @Tag(name = "Carrinho")
 @RestController
 @RequestMapping("/carrinho")
-public class CarrinhoController implements IControllerPattern<CarrinhoProdutosDTO, Long> {
+public class CarrinhoController {
 
     @Autowired
     private CarrinhoService carrinhoService;
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Override
-    public ResponseEntity<List<CarrinhoProdutosDTO>> getAll() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<CarrinhoProdutosDTO> getById(Long id) {
-        return null;
-    }
 
     @GetMapping("/{clienteId}")
     public ResponseEntity<List<CarrinhoProdutosResponseDTO>> getByClienteId(@PathVariable Long clienteId) {
@@ -67,9 +57,8 @@ public class CarrinhoController implements IControllerPattern<CarrinhoProdutosDT
         return ResponseEntity.ok().body(carrinhoResponse);
     }
 
-    @Override
     @PostMapping
-    public ResponseEntity<CarrinhoProdutosDTO> post(@RequestBody CarrinhoProdutosDTO object) {
+    public ResponseEntity<CarrinhoProdutosResponseDTO> post(@RequestBody CarrinhoProdutosDTO object) {
         var carrinhoRequest = this.carrinhoService.insert(object);
 
         if (carrinhoRequest == null) {
@@ -81,19 +70,9 @@ public class CarrinhoController implements IControllerPattern<CarrinhoProdutosDT
                 CarrinhoProdutosDTO.class
         ).addMappings(mapper -> mapper.map(CarrinhoProdutosEntity::getId, CarrinhoProdutosDTO::setId));
 
-        var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoProdutosDTO.class);
+        var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoProdutosResponseDTO.class);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(carrinhoRequest.getId()).toUri();
         return ResponseEntity.created(uri).body(carrinhoResponse);
-    }
-
-    @Override
-    public ResponseEntity<CarrinhoProdutosDTO> put(Long id, CarrinhoProdutosDTO object) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> delete(Long id) {
-        return null;
     }
 
 }

@@ -1,17 +1,18 @@
 package br.edu.senac.config;
 
+import br.edu.senac.exceptions.ErrorResponseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import java.io.IOException;
-import org.springframework.http.HttpStatus;
-import br.edu.senac.exceptions.ErrorResponseException;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
-public class CustomAuthenticationEntryPointConfig  implements AuthenticationEntryPoint {
+public class CustomAuthenticationEntryPointConfig implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -23,7 +24,7 @@ public class CustomAuthenticationEntryPointConfig  implements AuthenticationEntr
         );
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
 
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }

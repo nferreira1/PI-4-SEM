@@ -30,6 +30,7 @@ public class LoginService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private JwtEncoder jwtEncoder;
 
@@ -41,34 +42,34 @@ public class LoginService {
     }
 
     public String login(LoginDTO loginDTO) {
-
-        var cliente = this.loginRepository.findByEmailAndClienteEntityStatusTrue(loginDTO.getEmail()).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos.")
+        var cliente = this.loginRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
+                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado.")
         );
 
         if (!cliente.getClienteEntity().isStatus()) {
-            throw new ErrorResponseException(HttpStatus.FORBIDDEN, "Cliente inativo.");
+            throw new ErrorResponseException(HttpStatus.FORBIDDEN, "O cliente está inativo.");
         }
 
         if (!passwordEncoder.matches(loginDTO.getSenha(), cliente.getSenha())) {
             throw new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos.");
         }
 
-        var agora = Instant.now();
-        var expiraEm = 60 * 60 * 2; // 2 horas
+        var issuedAt = Instant.now();
+        var expiresAt = 60 * 60 * 2; // 2 horas
 
-        var scopes = new ArrayList<String>();
-        scopes.add("CLIENTE");
+        var roles = new ArrayList<String>();
+
+        roles.add("CLIENTE");
 
         var claims = JwtClaimsSet.builder()
                 .issuer("TechCommerce")
                 .claim("id", cliente.getId().toString())
                 .claim("nome", cliente.getClienteEntity().getNome())
                 .claim("email", cliente.getEmail())
-                .claim("scope", scopes)
+                .claim("roles", roles)
                 .subject(cliente.getClienteEntity().getId().toString())
-                .issuedAt(agora)
-                .expiresAt(agora.plusSeconds(expiraEm))
+                .issuedAt(issuedAt)
+                .expiresAt(issuedAt.plusSeconds(expiresAt))
                 .build();
 
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

@@ -28,10 +28,10 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
     @Override
     public ClienteEntity insert(ClienteEntity object) {
         var cliente = this.clienteRepository.save(object);
-
         var carrinho = new CarrinhoEntity();
         carrinho.setClienteEntity(cliente);
         cliente.setCarrinhoEntity(carrinho);
+
         this.carrinhoService.insert(carrinho);
 
         if (!object.getEnderecoEntities().isEmpty()) {
@@ -40,9 +40,10 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
                 this.enderecoService.insert(endereco);
             });
         }
+
         return cliente;
     }
-    
+
     @Transactional
     public ClienteEntity update(Long id) {
         var cliente = this.findById(id);

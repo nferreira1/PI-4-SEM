@@ -12,10 +12,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -51,9 +49,8 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     }
 
     @Override
-    @GetMapping("/{clienteId}")
-    public ResponseEntity<ClienteDTO> getById(@PathVariable Long clienteId) {
-        return ResponseEntity.ok().body(modelMapper.map(this.clienteService.findById(clienteId), ClienteDTO.class));
+    public ResponseEntity<ClienteDTO> getById(Long id) {
+        return null;
     }
 
     @Override
@@ -68,18 +65,8 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     }
 
     @Override
-    @PutMapping("/{clienteId}")
-    public ResponseEntity<ClienteDTO> put(@PathVariable Long clienteId, @Valid @RequestBody ClienteDTO produtoDTO) {
-
-        ClienteEntity cliente = clienteService.findById(clienteId);
-        if (cliente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        modelMapper.map(produtoDTO, cliente);
-        ClienteEntity clienteAtualizado = clienteService.insert(cliente);
-        ClienteDTO produtoResponseDTO = modelMapper.map(clienteAtualizado, ClienteDTO.class);
-
-        return ResponseEntity.ok().body(produtoResponseDTO);
+    public ResponseEntity<ClienteDTO> put(Long id, ClienteDTO object) {
+        return null;
     }
 
     @PatchMapping("/{clienteId}/status")

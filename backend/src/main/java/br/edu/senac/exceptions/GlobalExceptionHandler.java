@@ -11,7 +11,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
@@ -81,19 +80,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserPrincipalNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Object> handleUserPrincipalNotFoundException(UserPrincipalNotFoundException userPrincipalNotFoundException) {
-        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, userPrincipalNotFoundException.getName()));
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos."));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Object> handleUserPrincipalNotFoundException(BadCredentialsException badCredentialsException) {
-        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, badCredentialsException.getMessage()));
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos."));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<Object> handleUserPrincipalNotFoundException(AccessDeniedException accessDeniedException) {
-        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, accessDeniedException.getMessage()));
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.FORBIDDEN, "Você não tem permissão para acessar este recurso."));
     }
 
     // COLOCAR EM PRODUÇÃO

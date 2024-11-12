@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<CarrinhoDTO> getByCliente(JwtAuthenticationToken jwtAuthenticationToken) {
         var cliente = this.clienteService.findById(Long.valueOf(jwtAuthenticationToken.getToken().getSubject()));
         var carrinho = this.carrinhoService.findByCliente(cliente);
@@ -50,6 +52,7 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<CarrinhoDTO> post(@RequestBody CarrinhoProdutosRequestDTO object, JwtAuthenticationToken jwtAuthenticationToken) {
         var carrinhoRequest = this.carrinhoService.insert(
                 Long.valueOf(jwtAuthenticationToken.getToken().getSubject()),
@@ -68,6 +71,7 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<CarrinhoDTO> patch(@RequestBody CarrinhoProdutosRequestDTO object, JwtAuthenticationToken jwtAuthenticationToken) {
         var carrinhoRequest = this.carrinhoService.update(
                 Long.valueOf(jwtAuthenticationToken.getToken().getSubject()),

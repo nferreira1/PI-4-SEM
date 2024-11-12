@@ -6,9 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 
 @Slf4j(topic = "GLOBAL_EXCEPTION_HANDLER")
@@ -70,6 +76,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return buildErrorResponse(errorResponseException);
+    }
+
+    @ExceptionHandler(UserPrincipalNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> handleUserPrincipalNotFoundException(UserPrincipalNotFoundException userPrincipalNotFoundException) {
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, userPrincipalNotFoundException.getName()));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Object> handleUserPrincipalNotFoundException(BadCredentialsException badCredentialsException) {
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, badCredentialsException.getMessage()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<Object> handleUserPrincipalNotFoundException(AccessDeniedException accessDeniedException) {
+        return buildErrorResponse(new ErrorResponseException(HttpStatus.UNAUTHORIZED, accessDeniedException.getMessage()));
     }
 
     // COLOCAR EM PRODUÇÃO

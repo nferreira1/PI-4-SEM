@@ -13,13 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(value = {"id"}, allowGetters = true)
-public class CarrinhoProdutosDTO {
+public class CarrinhoProdutosRequestDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
-    private Long clienteId;
     private Long produtoId;
     private int quantidade;
 
 }
+

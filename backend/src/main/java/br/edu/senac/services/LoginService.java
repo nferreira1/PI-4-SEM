@@ -4,20 +4,23 @@ import br.edu.senac.dto.LoginDTO;
 import br.edu.senac.entity.ClienteEntity;
 import br.edu.senac.entity.LoginEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
-import br.edu.senac.interfaces.ILogin;
 import br.edu.senac.repositories.LoginRepository;
 import jakarta.validation.Valid;
-import org.aspectj.weaver.ast.And;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.Instant;
+import java.util.ArrayList;
+
 @Service
-public class LoginService implements ILogin {
+public class LoginService {
 
     @Autowired
     private LoginRepository loginRepository;
@@ -25,35 +28,50 @@ public class LoginService implements ILogin {
     @Autowired
     private ModelMapper modelMapper;
 
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtEncoder jwtEncoder;
 
     public LoginEntity insert(@RequestBody @Valid ClienteEntity object, String senha) {
-
-        LoginDTO loginDTO = new LoginDTO(object.getEmail().toLowerCase().trim(), registerLogin(senha.toLowerCase().trim()), object);
-
+        var loginDTO = new LoginDTO(object.getEmail().toLowerCase().trim(), this.passwordEncoder.encode(senha), object);
         var loginMapper = modelMapper.map(loginDTO, LoginEntity.class);
 
-        return loginRepository.save(loginMapper);
+        return this.loginRepository.save(loginMapper);
     }
 
-    public LoginDTO fazendoLogin(LoginDTO loginDTO) {
+    public String login(LoginDTO loginDTO) {
 
-        LoginEntity login = modelMapper.map(loginDTO, LoginEntity.class);
+        var cliente = this.loginRepository.findByEmailAndClienteEntityStatusTrue(loginDTO.getEmail()).orElseThrow(
+                () -> new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos.")
+        );
 
-        //Fazer nathan
-
-        if( (login == null) || (login.getEmail() != loginDTO.getEmail().toLowerCase().trim() || login.getSenha() != loginDTO.getSenha().toLowerCase().trim()) )
-        {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "O e-mail ou a senha estão incorretos");
+        if (!cliente.getClienteEntity().isStatus()) {
+            throw new ErrorResponseException(HttpStatus.FORBIDDEN, "Cliente inativo.");
         }
 
-        var loginsDTO = modelMapper.map(login, LoginDTO.class);
+        if (!passwordEncoder.matches(loginDTO.getSenha(), cliente.getSenha())) {
+            throw new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos.");
+        }
 
-        return loginsDTO;
-    }
+        var agora = Instant.now();
+        var expiraEm = 60 * 60 * 2; // 2 horas
 
-    private String registerLogin(String plainPassword) {
-        return passwordEncoder.encode(plainPassword);
+        var scopes = new ArrayList<String>();
+        scopes.add("CLIENTE");
+
+        var claims = JwtClaimsSet.builder()
+                .issuer("TechCommerce")
+                .claim("id", cliente.getId().toString())
+                .claim("nome", cliente.getClienteEntity().getNome())
+                .claim("email", cliente.getEmail())
+                .claim("scope", scopes)
+                .subject(cliente.getClienteEntity().getId().toString())
+                .issuedAt(agora)
+                .expiresAt(agora.plusSeconds(expiraEm))
+                .build();
+
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
 }

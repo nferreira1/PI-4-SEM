@@ -14,12 +14,16 @@ public interface IControllerPattern<T, U> {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })
     ResponseEntity<List<T>> getAll();
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })
@@ -27,6 +31,8 @@ public interface IControllerPattern<T, U> {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201"),
+            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "422", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
@@ -36,6 +42,8 @@ public interface IControllerPattern<T, U> {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "422", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
@@ -45,6 +53,8 @@ public interface IControllerPattern<T, U> {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204"),
+            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
             @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
     })

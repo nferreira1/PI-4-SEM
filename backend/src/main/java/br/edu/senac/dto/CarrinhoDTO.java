@@ -15,6 +15,6 @@ public class CarrinhoDTO {
 
     private Long id;
     private ClienteDTO cliente;
-    private List<CarrinhoProdutosDTO> itens;
+    private List<CarrinhoProdutosResponseDTO> itens;
 
 }

@@ -29,6 +29,11 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
     public ClienteEntity insert(ClienteEntity object) {
         var cliente = this.clienteRepository.save(object);
 
+        var carrinho = new CarrinhoEntity();
+        carrinho.setClienteEntity(cliente);
+        cliente.setCarrinhoEntity(carrinho);
+        this.carrinhoService.insert(carrinho);
+
         if (!object.getEnderecoEntities().isEmpty()) {
             object.getEnderecoEntities().forEach(endereco -> {
                 endereco.setClienteEntity(cliente);

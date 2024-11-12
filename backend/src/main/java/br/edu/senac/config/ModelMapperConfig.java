@@ -1,8 +1,9 @@
 package br.edu.senac.config;
 
-import br.edu.senac.dto.CarrinhoProdutosDTO;
-import br.edu.senac.dto.CarrinhoProdutosResponseDTO;
+import br.edu.senac.dto.CarrinhoDTO;
+import br.edu.senac.dto.CarrinhoProdutosRequestDTO;
 import br.edu.senac.dto.ClienteDTO;
+import br.edu.senac.entity.CarrinhoEntity;
 import br.edu.senac.entity.CarrinhoProdutosEntity;
 import br.edu.senac.entity.ClienteEntity;
 import br.edu.senac.entity.GeneroEntity;
@@ -43,24 +44,21 @@ public class ModelMapperConfig {
                 });
 
         // Mapeamento de CarrinhoProdutosEntity para CarrinhoProdutosDTO
-        modelMapper.typeMap(CarrinhoProdutosEntity.class, CarrinhoProdutosDTO.class)
+        modelMapper.typeMap(CarrinhoProdutosEntity.class, CarrinhoProdutosRequestDTO.class)
                 .addMappings(mapper -> {
-                    mapper.map(CarrinhoProdutosEntity::getId, CarrinhoProdutosDTO::setId);
-                    mapper.map(src -> src.getCarrinho().getClienteEntity().getId(), CarrinhoProdutosDTO::setClienteId);
-                    mapper.map(src -> src.getProduto().getId(), CarrinhoProdutosDTO::setProdutoId);
-                    mapper.map(CarrinhoProdutosEntity::getQuantidade, CarrinhoProdutosDTO::setQuantidade);
+                    mapper.map(CarrinhoProdutosEntity::getId, CarrinhoProdutosRequestDTO::setId);
+                    mapper.map(src -> src.getProduto().getId(), CarrinhoProdutosRequestDTO::setProdutoId); // Mapeia apenas o ID do produto
+                    mapper.map(CarrinhoProdutosEntity::getQuantidade, CarrinhoProdutosRequestDTO::setQuantidade);
                 });
 
-        // Mapeamento de CarrinhoProdutosEntity para CarrinhoProdutosResponseDTO
-        modelMapper.typeMap(CarrinhoProdutosEntity.class, CarrinhoProdutosResponseDTO.class)
+        // Mapeamento de CarrinhoEntity para CarrinhoDTO
+        modelMapper.typeMap(CarrinhoEntity.class, CarrinhoDTO.class)
                 .addMappings(mapper -> {
-                    mapper.map(CarrinhoProdutosEntity::getId, CarrinhoProdutosResponseDTO::setId);
-                    mapper.map(CarrinhoProdutosEntity::getProduto, CarrinhoProdutosResponseDTO::setProduto);
-                    mapper.map(CarrinhoProdutosEntity::getQuantidade, CarrinhoProdutosResponseDTO::setQuantidade);
+                    mapper.map(CarrinhoEntity::getClienteEntity, CarrinhoDTO::setCliente);
+                    mapper.map(CarrinhoEntity::getItens, CarrinhoDTO::setItens);
                 });
+
 
         return modelMapper;
     }
 }
-
-

@@ -22,7 +22,7 @@ public class ClienteDTO {
     private String telefone;
     private List<EnderecoDTO> endereco = new ArrayList<EnderecoDTO>();
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(accessMode = Schema.AccessMode.READ_WRITE)
     private String senha;
     private boolean status;
     private Long generoId;

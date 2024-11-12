@@ -25,7 +25,7 @@ public class CarrinhoEntity {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteEntity clienteEntity;
 
-    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarrinhoProdutosEntity> itens;
 
 }

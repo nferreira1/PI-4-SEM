@@ -1,6 +1,7 @@
 package br.edu.senac.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -28,11 +29,8 @@ public class LoginEntity {
     @NotNull(message = "A senha não pode ser nulo.")
     private String senha;
 
-    @Column(nullable = false)
-    @NotNull(message = "O endereço principal não pode ser nulo.")
-    private boolean status;
-
     @OneToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteEntity clienteEntity;
+
 }

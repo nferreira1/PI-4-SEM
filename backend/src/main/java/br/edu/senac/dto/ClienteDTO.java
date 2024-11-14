@@ -20,11 +20,12 @@ public class ClienteDTO {
     private String email;
     private String cpf;
     private String telefone;
+    private boolean recebeOfertas;
     private List<EnderecoDTO> endereco = new ArrayList<EnderecoDTO>();
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(accessMode = Schema.AccessMode.READ_WRITE)
     private String senha;
-    private boolean status;
+    private boolean status = true;
     private Long generoId;
 
 }

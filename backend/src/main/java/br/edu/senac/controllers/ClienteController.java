@@ -4,6 +4,7 @@ import br.edu.senac.dto.ClienteDTO;
 import br.edu.senac.entity.ClienteEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
 import br.edu.senac.patterns.IControllerPattern;
+import br.edu.senac.services.CarrinhoService;
 import br.edu.senac.services.ClienteService;
 import br.edu.senac.services.GeneroService;
 import br.edu.senac.services.LoginService;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,6 +40,9 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     private GeneroService generoService;
 
     @Autowired
+    private CarrinhoService carrinhoService;
+
+    @Autowired
     private LoginService loginService;
 
     @Override
@@ -44,7 +50,7 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
     public ResponseEntity<List<ClienteDTO>> getAll() {
         List<ClienteEntity> clienteEntities = this.clienteService.findAll();
         List<ClienteDTO> clienteDTOS = clienteEntities.stream().
-                map(cliente -> modelMapper.map(cliente, ClienteDTO.class)).collect(Collectors.toList());
+                map(cliente -> this.modelMapper.map(cliente, ClienteDTO.class)).collect(Collectors.toList());
         return ResponseEntity.ok().body(clienteDTOS);
     }
 
@@ -53,14 +59,27 @@ public class ClienteController implements IControllerPattern<ClienteDTO, Long> {
         return null;
     }
 
+    @GetMapping("/me")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+    })
+    @PreAuthorize("hasAuthority('CLIENTE')")
+    public ResponseEntity<ClienteDTO> getByToken(JwtAuthenticationToken jwtAuthenticationToken) {
+        var cliente = this.clienteService.findById(Long.valueOf(jwtAuthenticationToken.getToken().getSubject()));
+        var clienteResponse = this.modelMapper.map(cliente, ClienteDTO.class);
+        return ResponseEntity.ok().body(clienteResponse);
+    }
+
     @Override
     @PostMapping
     public ResponseEntity<ClienteDTO> post(@RequestBody ClienteDTO object) {
         this.generoService.findById(object.getGeneroId());
-        var cliente = modelMapper.map(object, ClienteEntity.class);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
-        cliente = this.clienteService.insert(cliente);
+        var cliente = this.clienteService.insert(this.modelMapper.map(object, ClienteEntity.class));
         this.loginService.insert(cliente, object.getSenha());
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
         return ResponseEntity.created(uri).body(modelMapper.map(cliente, ClienteDTO.class));
     }
 

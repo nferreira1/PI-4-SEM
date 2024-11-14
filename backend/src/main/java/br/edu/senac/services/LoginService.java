@@ -36,22 +36,22 @@ public class LoginService {
 
     public LoginEntity insert(@RequestBody @Valid ClienteEntity object, String senha) {
         var loginDTO = new LoginDTO(object.getEmail().toLowerCase().trim(), this.passwordEncoder.encode(senha), object);
-        var loginMapper = modelMapper.map(loginDTO, LoginEntity.class);
+        var loginMapper = this.modelMapper.map(loginDTO, LoginEntity.class);
 
         return this.loginRepository.save(loginMapper);
     }
 
     public String login(LoginDTO loginDTO) {
-        var cliente = this.loginRepository.findByEmail(loginDTO.getEmail()).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado.")
+        var cliente = this.loginRepository.findByEmail(loginDTO.getEmail().toLowerCase()).orElseThrow(
+                () -> new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos.")
         );
 
-        if (!cliente.getClienteEntity().isStatus()) {
+        if (!cliente.getClienteEntity().isStatus() && passwordEncoder.matches(loginDTO.getSenha(), cliente.getSenha())) {
             throw new ErrorResponseException(HttpStatus.FORBIDDEN, "O cliente está inativo.");
         }
 
         if (!passwordEncoder.matches(loginDTO.getSenha(), cliente.getSenha())) {
-            throw new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha incorretos.");
+            throw new ErrorResponseException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos.");
         }
 
         var issuedAt = Instant.now();
@@ -63,11 +63,11 @@ public class LoginService {
 
         var claims = JwtClaimsSet.builder()
                 .issuer("TechCommerce")
-                .claim("id", cliente.getId().toString())
+                .subject(cliente.getClienteEntity().getId().toString())
+                .claim("id", cliente.getClienteEntity().getId())
                 .claim("nome", cliente.getClienteEntity().getNome())
                 .claim("email", cliente.getEmail())
                 .claim("roles", roles)
-                .subject(cliente.getClienteEntity().getId().toString())
                 .issuedAt(issuedAt)
                 .expiresAt(issuedAt.plusSeconds(expiresAt))
                 .build();

@@ -4,6 +4,7 @@ import br.edu.senac.entity.CarrinhoEntity;
 import br.edu.senac.entity.ClienteEntity;
 import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.ClienteRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,10 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private CarrinhoService carrinhoService;
+    private EnderecoService enderecoService;
 
     @Autowired
-    private EnderecoService enderecoService;
+    private ModelMapper modelMapper;
 
     public ClienteService(JpaRepository<ClienteEntity, Long> repository) {
         super(repository);
@@ -31,8 +32,6 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
         var carrinho = new CarrinhoEntity();
         carrinho.setClienteEntity(cliente);
         cliente.setCarrinhoEntity(carrinho);
-
-        this.carrinhoService.insert(carrinho);
 
         if (!object.getEnderecoEntities().isEmpty()) {
             object.getEnderecoEntities().forEach(endereco -> {

@@ -46,6 +46,10 @@ public class ClienteEntity {
     @NotBlank(message = "O telefone não pode ser nulo e nem vazio.")
     private String telefone;
 
+    @Column(nullable = false)
+    @NotNull(message = "O atributo recebeOfertas não pode ser nulo.")
+    private boolean recebeOfertas;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genero_id", nullable = false)
     private GeneroEntity generoEntity;
@@ -56,7 +60,7 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "clienteEntity")
     private List<PedidoEntity> pedidoEntities = new ArrayList<PedidoEntity>();
 
-    @OneToOne(mappedBy = "clienteEntity", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "clienteEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CarrinhoEntity carrinhoEntity;
 
     @JsonIgnore

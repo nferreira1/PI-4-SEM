@@ -41,26 +41,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorize -> authorize
-                        // Especifica que "/carrinho" requer autenticação
-                        .requestMatchers("/carrinho").authenticated()
-                        // Permite todas as outras rotas
-                        .anyRequest().permitAll()
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .exceptionHandling(exceptionHandling -> {
+                            exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPointConfig);
+                            exceptionHandling.accessDeniedHandler(customAuthenticationEntryPointConfig);
+                        }
                 )
-                // Configura um `AuthenticationEntryPoint` personalizado para erros de autenticação
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPointConfig)
-                )
-                // Configura o CORS e desativa o CSRF para APIs
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
-                // Configura a autenticação como Stateless para evitar sessão
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                // Configura o suporte para JWT em OAuth2
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                ).build();
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .build();
     }
 
     @Bean

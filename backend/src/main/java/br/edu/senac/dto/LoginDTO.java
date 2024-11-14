@@ -18,9 +18,9 @@ public class LoginDTO {
 
     private String email;
     private String senha;
-
     @JsonIgnore
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private ClienteEntity cliente;
+
 }

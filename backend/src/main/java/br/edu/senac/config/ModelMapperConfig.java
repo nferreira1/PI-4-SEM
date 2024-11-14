@@ -19,6 +19,9 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
+        // Ignora campos nulos
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+
         // Conversor para GeneroEntity
         Converter<Long, GeneroEntity> generoConverter = context -> {
             Long generoId = context.getSource();
@@ -41,6 +44,7 @@ public class ModelMapperConfig {
                 .addMappings(mapper -> {
                     mapper.using(generoConverter).map(ClienteDTO::getGeneroId, ClienteEntity::setGeneroEntity);
                     mapper.using(emailToLowerConverter).map(ClienteDTO::getEmail, ClienteEntity::setEmail);
+                    mapper.skip(ClienteEntity::setId);
                 });
 
         // Mapeamento de CarrinhoProdutosEntity para CarrinhoProdutosDTO

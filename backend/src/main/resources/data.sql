@@ -1,23 +1,19 @@
-INSERT INTO generos (nome)
-SELECT 'MASCULINO'
-    WHERE NOT EXISTS (SELECT 1 FROM generos WHERE nome = 'MASCULINO');
+INSERT INTO generos(id, nome) VALUES (1, 'MASCULINO')
+    ON CONFLICT (id) DO UPDATE SET nome = EXCLUDED.nome;
 
-INSERT INTO generos (nome)
-SELECT 'FEMININO'
-    WHERE NOT EXISTS (SELECT 1 FROM generos WHERE nome = 'FEMININO');
+INSERT INTO generos(id, nome) VALUES (2, 'FEMININO')
+    ON CONFLICT (id) DO UPDATE SET nome = EXCLUDED.nome;
 
-INSERT INTO generos (nome)
-SELECT 'OUTRO'
-    WHERE NOT EXISTS (SELECT 1 FROM generos WHERE nome = 'OUTRO');
+INSERT INTO generos(id, nome) VALUES (3, 'OUTRO')
+    ON CONFLICT (id) DO UPDATE SET nome = EXCLUDED.nome;
 
-INSERT INTO generos (nome)
-SELECT 'NÃO ESPECIFICADO'
-    WHERE NOT EXISTS (SELECT 1 FROM generos WHERE nome = 'NÃO ESPECIFICADO');
+INSERT INTO generos(id, nome) VALUES (4, 'NÃO ESPECIFICADO')
+    ON CONFLICT (id) DO UPDATE SET nome = EXCLUDED.nome;
 
 INSERT INTO roles(id, nome) VALUES (1, 'CLIENTE')
 ON CONFLICT (id) DO UPDATE SET nome = EXCLUDED.nome;
 
-INSERT INTO roles(id, nome) VALUES (1, 'ADMIN')
+INSERT INTO roles(id, nome) VALUES (2, 'ADMIN')
     ON CONFLICT (id) DO UPDATE SET nome = EXCLUDED.nome;
 
 

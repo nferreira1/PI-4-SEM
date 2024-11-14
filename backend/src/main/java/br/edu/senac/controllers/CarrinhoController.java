@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Carrinho")
 @RestController
 @RequestMapping("/carrinho")
+@PreAuthorize("hasRole('CLIENTE')")
 public class CarrinhoController {
 
     @Autowired

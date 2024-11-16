@@ -51,7 +51,7 @@ public class ModelMapperConfig {
         modelMapper.typeMap(CarrinhoProdutosEntity.class, CarrinhoProdutosRequestDTO.class)
                 .addMappings(mapper -> {
                     mapper.map(CarrinhoProdutosEntity::getId, CarrinhoProdutosRequestDTO::setId);
-                    mapper.map(src -> src.getProduto().getId(), CarrinhoProdutosRequestDTO::setProdutoId); // Mapeia apenas o ID do produto
+                    mapper.map(src -> src.getProduto().getId(), CarrinhoProdutosRequestDTO::setProdutoId);
                     mapper.map(CarrinhoProdutosEntity::getQuantidade, CarrinhoProdutosRequestDTO::setQuantidade);
                 });
 

@@ -23,7 +23,7 @@ public class ClienteDTO {
     private boolean recebeOfertas;
     private List<EnderecoDTO> endereco = new ArrayList<EnderecoDTO>();
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(accessMode = Schema.AccessMode.READ_WRITE)
+    @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private String senha;
     private boolean status = true;
     private Long generoId;

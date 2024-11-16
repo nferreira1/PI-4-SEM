@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-export function HeaderSimples() {
+export async function HeaderSimples() {
 	return (
 		<header className="border-b">
 			<div className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between px-5">

@@ -23,7 +23,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ListOrdered, LogOut, User2 } from "lucide-react";
 import Link from "next/link";
 
-export function SheetPerfil() {
+export function SheetMenu() {
 	const { logout } = useAuth();
 
 	const links = [

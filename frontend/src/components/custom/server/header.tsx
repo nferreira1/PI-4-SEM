@@ -1,5 +1,5 @@
 import { SheetCarrinho } from "@/components/custom/client/sheet-carrinho";
-import { SheetPerfil } from "@/components/custom/client/sheet-perfil";
+import { SheetMenu } from "@/components/custom/client/sheet-menu";
 import { Button } from "@/components/ui/button";
 import { verifySession } from "@/server/session.server";
 import { ShoppingCart, User2 } from "lucide-react";
@@ -48,7 +48,7 @@ export async function Header() {
 							</Button>
 						</Link>
 					) : (
-						<SheetPerfil />
+						<SheetMenu />
 					)}
 					<Link href="/carrinho">
 						<Button

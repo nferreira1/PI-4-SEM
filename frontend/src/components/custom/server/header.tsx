@@ -8,8 +8,6 @@ import Link from "next/link";
 export async function Header() {
 	const session = await verifySession();
 
-	console.log(session);
-
 	return (
 		<header className="border-b">
 			<div className="mx-auto flex min-h-20 max-w-screen-xl items-center justify-between px-5">

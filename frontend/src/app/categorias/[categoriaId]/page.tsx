@@ -1,15 +1,13 @@
-import { Produto } from "@/components/custom/produto";
+import { Produto } from "@/components/custom/server/produto";
 import { api } from "@/lib/api";
 import { validateSchema } from "@/lib/validation";
 import { z } from "zod";
 
 export default async function Page({
 	params,
-}: Readonly<{
-	params: {
-		categoriaId: string;
-	};
-}>) {
+}: {
+	readonly params: Promise<{ categoriaId: string }>;
+}) {
 	const schema = z.object({
 		categoriaId: z.coerce.number().refine((value) => !isNaN(value), {
 			message: "Categoria não encontrada.",
@@ -22,14 +20,14 @@ export default async function Page({
 
 	const [{ data: dataCategorias }, { data: dataProdutos }] =
 		await Promise.all([
-			await api.GET("/categoria/{categoriaId}", {
+			api.GET("/categoria/{categoriaId}", {
 				params: {
 					path: {
 						categoriaId: data.categoriaId,
 					},
 				},
 			}),
-			await api.GET("/produto/categoria/{categoriaId}/produtos", {
+			api.GET("/produto/categoria/{categoriaId}/produtos", {
 				params: {
 					path: {
 						categoriaId: data.categoriaId,

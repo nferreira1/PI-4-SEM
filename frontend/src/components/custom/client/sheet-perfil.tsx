@@ -20,7 +20,7 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
-import { LogOut, User2 } from "lucide-react";
+import { ListOrdered, LogOut, User2 } from "lucide-react";
 import Link from "next/link";
 
 export function SheetPerfil() {
@@ -28,7 +28,7 @@ export function SheetPerfil() {
 
 	const links = [
 		{ href: "/perfil", label: "Perfil", icon: User2 },
-		{ href: "/meus-pedidos", label: "Meus pedidos", icon: User2 },
+		{ href: "/meus-pedidos", label: "Meus pedidos", icon: ListOrdered },
 	];
 
 	return (
@@ -53,7 +53,7 @@ export function SheetPerfil() {
 								asChild
 							>
 								<Link href={href}>
-									<Icon size={18} />
+									<Icon size={20} />
 									<span>{label}</span>
 								</Link>
 							</Button>
@@ -67,7 +67,7 @@ export function SheetPerfil() {
 								variant="ghost"
 								size="lg"
 							>
-								<LogOut size={18} className="rotate-180" />
+								<LogOut size={20} className="rotate-180" />
 								<span>Sair</span>
 							</Button>
 						</AlertDialogTrigger>

@@ -49,6 +49,9 @@ export async function singup(_previousState: unknown, formData: FormData) {
 					message:
 						"Telefone no formato inválido. Deve estar no formato 11912345678.",
 				}),
+			recebeOfertas: z.coerce.boolean({
+				message: "O campo receber ofertas é obrigatório.",
+			}),
 			senha: z
 				.string({
 					message: "O campo senha é obrigatório.",
@@ -84,6 +87,7 @@ export async function singup(_previousState: unknown, formData: FormData) {
 		genero: formData.get("genero"),
 		email: formData.get("email"),
 		telefone: formData.get("telefone"),
+		recebeOfertas: formData.get("recebeOfertas"),
 		senha: formData.get("senha"),
 		confirmarSenha: formData.get("confirmarSenha"),
 	};
@@ -107,20 +111,37 @@ export async function singup(_previousState: unknown, formData: FormData) {
 			telefone: result.data.telefone,
 			senha: result.data.senha,
 			generoId: result.data.genero,
+			recebeOfertas: result.data.recebeOfertas,
 		},
 	});
 
 	if (error) {
-		await redirectWithToast("/cadastro", {
+		if (error.status === 409) {
+			const validation = error.errors?.reduce(
+				(acc, err) => ({
+					...acc,
+					[err.field as string]: [err.message],
+				}),
+				{},
+			) as Record<string, string[]>;
+
+			return {
+				validation,
+				previousState: { ...data },
+			};
+		}
+
+		return await redirectWithToast("/cadastro", {
 			type: "error",
-			title: error.message as string,
+			title: "Erro!",
 			description: error.message as string,
 		});
 	}
 
-	await redirectWithToast("/", {
+	return await redirectWithToast("/login", {
 		type: "success",
 		title: "Sucesso!",
-		description: "Cadastro realizado com sucesso.",
+		description:
+			"Cadastro realizado com sucesso. Faça o login para continuar.",
 	});
 }

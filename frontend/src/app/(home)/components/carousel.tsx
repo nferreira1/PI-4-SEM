@@ -1,6 +1,6 @@
 "use client";
 
-import { Produto } from "@/components/custom/produto";
+import { Produto } from "@/components/custom/server/produto";
 import {
 	Carousel as C,
 	CarouselContent,

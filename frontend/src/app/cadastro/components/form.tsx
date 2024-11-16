@@ -1,6 +1,6 @@
 "use client";
 
-import { FormControl, FormField } from "@/components/custom/form-field";
+import { FormControl, FormField } from "@/components/custom/client/form-field";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -66,9 +66,38 @@ export function Form({
 
 				<FormField
 					className="sm:col-span-2"
-					label="Gênero **"
-					error={state?.validation?.genero}
+					label="E-mail *"
+					error={state?.validation?.email}
 				>
+					<FormControl>
+						<Input
+							type="text"
+							name="email"
+							placeholder="nathan@exemplo.com"
+							defaultValue={state?.previousState?.email as string}
+							disabled={isPending}
+						/>
+					</FormControl>
+				</FormField>
+
+				<FormField
+					label="Telefone *"
+					error={state?.validation?.telefone}
+				>
+					<FormControl>
+						<Input
+							type="tel"
+							name="telefone"
+							placeholder="11962506450"
+							defaultValue={
+								state?.previousState?.telefone as string
+							}
+							disabled={isPending}
+						/>
+					</FormControl>
+				</FormField>
+
+				<FormField label="Gênero **" error={state?.validation?.genero}>
 					<FormControl>
 						<Select
 							name="genero"
@@ -96,35 +125,6 @@ export function Form({
 								</SelectGroup>
 							</SelectContent>
 						</Select>
-					</FormControl>
-				</FormField>
-
-				<FormField
-					label="Telefone *"
-					error={state?.validation?.telefone}
-				>
-					<FormControl>
-						<Input
-							type="tel"
-							name="telefone"
-							placeholder="11962506450"
-							defaultValue={
-								state?.previousState?.telefone as string
-							}
-							disabled={isPending}
-						/>
-					</FormControl>
-				</FormField>
-
-				<FormField label="E-mail *" error={state?.validation?.email}>
-					<FormControl>
-						<Input
-							type="text"
-							name="email"
-							placeholder="nathan@exemplo.com"
-							defaultValue={state?.previousState?.email as string}
-							disabled={isPending}
-						/>
 					</FormControl>
 				</FormField>
 
@@ -171,8 +171,12 @@ export function Form({
 					(*) Campos obrigatórios
 				</p>
 				<div className="flex items-center space-x-2">
-					<Checkbox id="ofertas" disabled />
-					<Label id="ofertas">
+					<Checkbox
+						id="recebeOfertas"
+						name="recebeOfertas"
+						disabled={isPending}
+					/>
+					<Label htmlFor="recebeOfertas">
 						Quero receber ofertas e novidades por e-mail da
 						plataforma{" "}
 						<span className="font-semibold text-primary">
@@ -182,7 +186,7 @@ export function Form({
 				</div>
 
 				<div className="items-top flex space-x-2">
-					<Checkbox id="termos" disabled={isPending} />
+					<Checkbox id="termos" disabled={isPending} required />
 					<Label htmlFor="termos" className="grid">
 						<span>Aceitar termos e condições</span>
 						<span className="font-normal text-muted-foreground">

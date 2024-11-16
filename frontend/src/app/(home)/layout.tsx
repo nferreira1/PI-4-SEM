@@ -1,7 +1,7 @@
-import { Footer } from "@/components/custom/footer";
-import { Header } from "@/components/custom/header";
+import { Footer } from "@/components/custom/server/footer";
+import { Header } from "@/components/custom/server/header";
 
-export default function UserLayout({
+export default async function Layout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

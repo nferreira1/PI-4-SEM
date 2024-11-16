@@ -1,5 +1,5 @@
-import { Footer } from "@/components/custom/footer";
-import { Header } from "@/components/custom/header";
+import { Footer } from "@/components/custom/server/footer";
+import { Header } from "@/components/custom/server/header";
 
 export default function Layout({
 	children,

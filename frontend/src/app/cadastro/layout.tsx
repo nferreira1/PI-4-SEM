@@ -1,5 +1,5 @@
-import { Footer } from "@/components/custom/footer";
-import { HeaderSimples } from "@/components/custom/header-simples";
+import { Footer } from "@/components/custom/server/footer";
+import { HeaderSimples } from "@/components/custom/server/header-simples";
 
 export default function UserLayout({
 	children,

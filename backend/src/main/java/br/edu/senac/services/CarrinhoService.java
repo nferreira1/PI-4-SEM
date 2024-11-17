@@ -11,7 +11,6 @@ import br.edu.senac.entity.ProdutoEntity;
 import br.edu.senac.exceptions.ErrorResponseException;
 import br.edu.senac.interfaces.ICarrinho;
 import br.edu.senac.patterns.ServiceGeneric;
-import br.edu.senac.repositories.CarrinhoProdutosRepository;
 import br.edu.senac.repositories.CarrinhoRepository;
 import br.edu.senac.repositories.ClienteRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,9 +26,6 @@ import java.util.List;
 
 @Service
 public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implements ICarrinho {
-
-    @Autowired
-    private CarrinhoProdutosRepository carrinhoProdutosRepository;
 
     @Autowired
     private CarrinhoRepository carrinhoRepository;
@@ -75,16 +71,16 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
         var produto = this.produtoService.findById(produtoId);
 
         if (produto.getEstoque() < quantidade) {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
+            throw new ErrorResponseException(HttpStatus.BAD_REQUEST,
+                    "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
         }
 
         if (quantidade <= 0) {
             throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "A quantidade deve ser maior do que zero.");
         }
 
-        var cliente = this.clienteRepository.findById(clienteId).orElseThrow(
-                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado")
-        );
+        var cliente = this.clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
         var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
 
@@ -102,7 +98,7 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
             CarrinhoProdutosEntity carrinhoProduto = itemExistente.get();
             carrinhoProduto.setQuantidade(carrinhoProduto.getQuantidade() + quantidade);
         } else {
-            CarrinhoProdutosEntity novoItem = new CarrinhoProdutosEntity();
+            var novoItem = new CarrinhoProdutosEntity();
             novoItem.setCarrinho(carrinho);
             novoItem.setProduto(produto);
             novoItem.setQuantidade(quantidade);
@@ -162,6 +158,5 @@ public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implem
 
         return listProdutos;
     }
-
 
 }

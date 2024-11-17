@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "carrinhos")
@@ -24,7 +25,7 @@ public class CarrinhoEntity {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteEntity clienteEntity;
 
-    @OneToMany(mappedBy = "carrinho", orphanRemoval = true)
-    private List<CarrinhoProdutosEntity> itens;
+    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CarrinhoProdutosEntity> itens = new ArrayList<CarrinhoProdutosEntity>();
 
 }

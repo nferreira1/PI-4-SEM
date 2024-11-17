@@ -61,7 +61,6 @@ public class CarrinhoController {
                 object.getQuantidade()
         );
         var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoDTO.class);
-
         return ResponseEntity.ok().body(carrinhoResponse);
     }
 

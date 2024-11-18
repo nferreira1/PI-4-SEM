@@ -3,7 +3,11 @@ import Link from "next/link";
 import { Form } from "./components/form";
 
 export default async function Page() {
-	const { data } = await api.GET("/genero");
+	const { data, error } = await api.GET("/genero");
+
+	if (error) {
+		throw new Error(error.message);
+	}
 
 	return (
 		<div className="grid w-full gap-6">

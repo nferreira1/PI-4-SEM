@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function Page() {
-	const { data } = await api.GET("/categoria");
+	const { data, error } = await api.GET("/categoria");
+
+	if (error) {
+		throw new Error(error.message);
+	}
 
 	return (
 		<>

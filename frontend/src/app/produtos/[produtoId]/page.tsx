@@ -25,7 +25,10 @@ export default async function Page({
 
 	if (!success) throw new Error("Produto não encontrado.");
 
-	const [{ data: dataProduto }, { data: dataProdutos }] = await Promise.all([
+	const [
+		{ data: dataProduto, error: errorProduto },
+		{ data: dataProdutos, error: errorProdutos },
+	] = await Promise.all([
 		api.GET("/produto/{produtoId}", {
 			params: {
 				path: {
@@ -35,6 +38,10 @@ export default async function Page({
 		}),
 		await api.GET("/produto"),
 	]);
+
+	if (errorProduto) throw new Error(errorProduto.message);
+
+	if (errorProdutos) throw new Error(errorProdutos.message);
 
 	return (
 		<>

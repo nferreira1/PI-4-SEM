@@ -38,7 +38,7 @@ export default async function Page({
 
 	return (
 		<>
-			<section className="relative flex aspect-square items-center bg-muted md:col-span-1 md:aspect-auto md:rounded-lg lg:col-span-2">
+			<section className="relative flex aspect-square h-[570px] items-center bg-muted md:col-span-1 md:aspect-auto md:rounded-lg lg:col-span-2">
 				<Imagem data={dataProduto} />
 			</section>
 

@@ -20,7 +20,7 @@ export function DetalhesProdutos({
 	};
 
 	return (
-		<section className="grid grow gap-4 px-5 py-8 md:col-span-1 md:rounded-lg md:bg-muted lg:col-span-1">
+		<section className="grid h-[570px] grow gap-4 px-5 py-8 md:col-span-1 md:rounded-lg md:bg-muted lg:col-span-1">
 			<div>
 				<span className="text-xs text-muted-foreground">
 					Novo | 100 vendidos

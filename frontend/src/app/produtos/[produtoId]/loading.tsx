@@ -5,8 +5,8 @@ import { Star } from "lucide-react";
 export default async function Loading() {
 	return (
 		<>
-			<Skeleton className="relative flex h-[642px] items-center rounded-none md:col-span-1 md:rounded-lg lg:col-span-2" />
-			<Skeleton className="h-[642px] md:col-span-1 md:rounded-lg lg:col-span-1" />
+			<Skeleton className="relative flex h-[570px] items-center rounded-none md:col-span-1 md:rounded-lg lg:col-span-2" />
+			<Skeleton className="hidden h-[570px] md:col-span-1 md:block md:rounded-lg lg:col-span-1" />
 
 			<section className="col-span-full animate-pulse px-5 py-6 pt-8 text-primary/10 md:hidden md:pb-0 md:pl-0">
 				<div className="grid gap-2">

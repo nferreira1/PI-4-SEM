@@ -41,7 +41,7 @@ export async function verifySession() {
 			},
 		});
 
-		return { cliente: data, token: decodedToken };
+		return { cliente: data, token: token };
 	} catch {
 		return;
 	}

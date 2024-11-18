@@ -60,7 +60,7 @@ export async function Header() {
 						</Button>
 					</Link>
 
-					<SheetCarrinho carrinho={[] as Schema["CarrinhoDTO"]} />
+					<SheetCarrinho />
 				</div>
 			</div>
 		</header>

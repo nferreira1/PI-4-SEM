@@ -29,7 +29,7 @@ export default async function Page() {
 				/>
 				<div className="absolute inset-0 bg-primary opacity-60" />
 
-				<div className="absolute left-1/2 top-1/2 z-50 mx-auto flex h-full w-full max-w-screen-xl -translate-x-1/2 -translate-y-1/2 items-center justify-between">
+				<div className="absolute left-1/2 top-1/2 z-40 mx-auto flex h-full w-full max-w-screen-xl -translate-x-1/2 -translate-y-1/2 items-center justify-between">
 					<p className="text-center text-6xl font-bold leading-tight">
 						<span className="block">Ofertas</span>
 						<span className="block rounded-full border-2 border-primary px-4">

@@ -7,9 +7,9 @@ import { toast } from "sonner";
 
 export default function ToastProvider({
 	children,
-}: {
+}: Readonly<{
 	children: React.ReactNode;
-}) {
+}>) {
 	const pathname = usePathname();
 
 	useEffect(() => {

@@ -4,7 +4,7 @@ import { verifySession } from "./server/session.server";
 export async function middleware(request: NextRequest) {
 	const currentPath = request.nextUrl.pathname;
 
-	const protectedRoutes = ["/meus-pedidos"];
+	const protectedRoutes = ["/meus-pedidos", "/perfil"];
 	const isProtectedRoute = protectedRoutes.includes(currentPath);
 
 	const signinAndSignupRoutes = ["/login", "/cadastro"];

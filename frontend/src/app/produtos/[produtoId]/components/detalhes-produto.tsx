@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { $api } from "@/lib/api";
+import { useCarrinho } from "@/hooks/useCarrinho";
 import { formatNumber } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, Loader2, Star, Truck } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Truck } from "lucide-react";
 import { useState } from "react";
 
 export function DetalhesProdutos({
@@ -11,22 +11,13 @@ export function DetalhesProdutos({
 }: Readonly<{
 	produto: Schema["ProdutoDTO"] | undefined;
 }>) {
+	const { add, inTheCart } = useCarrinho();
 	const [quantidade, setQuantidade] = useState<number>(1);
 
 	const handleQuantidade = (value: number) => {
 		if (value < 1 || value > (produto?.estoque ?? 0)) return;
 		setQuantidade(value);
 	};
-
-	const handleAdicionarAoCarrinho = () =>
-		mutate({
-			body: {
-				produtoId: produto?.id,
-				quantidade,
-			},
-		});
-
-	const { mutate, isPending } = $api.useMutation("post", "/carrinho");
 
 	return (
 		<section className="grid grow gap-4 px-5 py-8 md:col-span-1 md:rounded-lg md:bg-muted lg:col-span-1">
@@ -69,7 +60,7 @@ export function DetalhesProdutos({
 				<Button
 					size="icon"
 					className="transition-transform hover:scale-110"
-					disabled={isPending || quantidade === 1}
+					disabled={quantidade === 1 || inTheCart(produto!)}
 					onClick={() => handleQuantidade(quantidade - 1)}
 				>
 					<ChevronLeft size={16} />
@@ -80,7 +71,9 @@ export function DetalhesProdutos({
 				<Button
 					size="icon"
 					className="transition-transform hover:scale-110"
-					disabled={isPending || produto?.estoque === quantidade}
+					disabled={
+						produto?.estoque === quantidade || inTheCart(produto!)
+					}
 					onClick={() => handleQuantidade(quantidade + 1)}
 				>
 					<ChevronRight size={16} />
@@ -96,14 +89,17 @@ export function DetalhesProdutos({
 
 			<Button
 				size="lg"
-				disabled={isPending}
-				onClick={handleAdicionarAoCarrinho}
+				onClick={() =>
+					add({
+						produto: produto!,
+						quantidade: quantidade,
+					})
+				}
+				disabled={inTheCart(produto!)}
 			>
-				{isPending ? (
-					<Loader2 size={22} className="animate-spin" />
-				) : (
-					"ADICIONAR AO CARRINHO"
-				)}
+				{inTheCart(produto!)
+					? "PRODUTO JÁ ADICIONADO AO CARRINHO"
+					: "ADICIONAR AO CARRINHO"}
 			</Button>
 
 			<div className="flex items-center gap-x-6 rounded-xl bg-muted px-6 py-4 md:bg-accent">

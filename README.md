@@ -130,11 +130,12 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
             proxy_set_header X-Forwarded-Proto $scheme;
         }
       }
-  - Instale o [Nginx](https://nginx.org/en/) através do Docker:
+  - Instale o [Nginx](https://nginx.org/en/) através do Docker e configure para fazer o proxy reverso para obter o caminho das imagens, usando o mesmo nome da variável `DIRECTORY_SERVER_IMAGES`:
     ```bash
      docker run -d --name nginx \
      -p 80:80 \
      --network nginx-frontend \
+     -v {DIRECTORY_SERVER_IMAGES}:{DIRECTORY_SERVER_IMAGES} \
      -v /techcommerce/nginx-config/default.conf:/etc/nginx/conf.d/default.conf \
      nginx
 - Basta apenas lançar uma nova release que ele irá automaticamente fazer a publicação na Máquina Virtual.

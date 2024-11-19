@@ -75,23 +75,37 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
   sudo apt upgrade
 - Crie uma pasta no diretório raiz do servidor. O nome dessa pasta deve ser o mesmo da pasta pai definida na variável de ambiente `DIRECTORY_SERVER_IMAGES`. Isso garante consistência no caminho de armazenamento das imagens.
   ```bash
-  sudo mkdir /techcommerce
+  sudo mkdir -p /techcommerce/images
 - Crie uma sub pasta no diretório para fazer o upload das imagens do docker após o build, ela deve ter o nome de `docker-images`.
   ```bash
-  sudo mkdir /techcommerce/docker-images
+  sudo mkdir -p /techcommerce/docker-images
 - Ajuste as permissões dessa pasta para permitir que qualquer usuário do sistema possa ler, escrever e executar arquivos dentro dela.
   ```bash
   sudo chmod 777 /techcommerce
 - Instale o [Docker](https://www.docker.com/), você pode seguir o passo a passo pela documentação no [site oficial](https://docs.docker.com/engine/install/ubuntu/);
+  - Crie um banco de dados PostgreSQL, o usuário e senha devem ser iguais as variáveis `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD`:
+    ```bash
+    docker run -d --name postgresql \
+    -p 5432:5432 \
+    -e POSTGRES_DB=postgres \
+    -e POSTGRES_USER={SPRING_DATASOURCE_USERNAME}  \
+    -e POSTGRES_PASSWORD={SPRING_DATASOURCE_PASSWORD} \
+    -v postgresql:/var/lib/postgresql/data
+    postgresql:15.3
+  - Acesse o banco via `docker exec`:
+    ```bash
+    docker exec -it postgresql psql -U postgres
+  - Crie o banco que será usado na aplicação, ele deve ter o mesmo nome que será usado na string de conexão `SPRING_DATASOURCE_URL`:
+    ```sql
+    CREATE DATABASE techcommerce;
   - Crie uma rede para ter a comunicação entre o Nginx e o Front-End:
     ```bash
      docker network create nginx-frontend
-  - Crie um arquivo de configuração para que o Nginx faça o proxy reverso, para a exibição do caminho das imagens:
-    ```bash
-     docker network create nginx-frontend
-  - Crie o arquivo de configuração do Nginx:
+  - Crie uma pasta de configuração para que o Nginx faça o proxy reverso, para a exibição do caminho das imagens:
     ```bash
      sudo mkdir -p /techcommerce/nginx-config
+  - Crie o arquivo de configuração do Nginx:
+    ```bash
      sudo nano /techcommerce/nginx-config/default.conf
   	```
     - Escreva os seguintes dados:

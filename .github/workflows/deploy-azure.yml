@@ -78,5 +78,8 @@ jobs:
                       docker rm frontend-container || true &&
                       docker rmi frontend-image || true &&
                       docker load -i /techcommerce/docker-images/frontend-image.tar.gz &&
-                      docker run -d -p 80:4173 \
-                      --name frontend-container frontend-image
+                      docker run --name frontend-container \
+                      -p 80:3000 \
+                      -e NEXT_PUBLIC_API_URL=http://${{ secrets.VM_IP }}:8080 \
+                      frontend-image --name frontend-container \
+                      frontend-image

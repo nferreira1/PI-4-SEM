@@ -123,7 +123,7 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
     
         # Redireciona todas as outras requisições para o contêiner da aplicação
         location / {
-            proxy_pass http://frontend-container:4173;  # Nome do contêiner da aplicação e a porta mapeada
+            proxy_pass http://frontend-container:3000;  # Nome do contêiner da aplicação e a porta mapeada
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

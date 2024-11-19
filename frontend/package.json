@@ -5,7 +5,7 @@
 	"scripts": {
 		"prepare": "copy .husky\\pre-commit ..\\.git\\hooks\\pre-commit",
 		"dev": "npx openapi-typescript http://localhost:8080/v1/api-docs -o ./.swagger/v1/api-docs.d.ts && next dev",
-		"build": "next build",
+		"build": "node build.js",
 		"start": "next start",
 		"lint": "next lint",
 		"format": "prettier --write ."

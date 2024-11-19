@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { verifySession } from "@/server/session.server";
 import { ShoppingCart, User2 } from "lucide-react";
 import Link from "next/link";
+import { ChangeThemeMode } from "../client/change-theme-mode";
 
 export async function Header() {
 	const session = await verifySession();
@@ -41,6 +42,7 @@ export async function Header() {
 				</div>
 
 				<div className="flex gap-2">
+					<ChangeThemeMode />
 					{!session ? (
 						<Link href="/login">
 							<Button variant="outline" size="icon">

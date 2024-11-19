@@ -80,5 +80,5 @@ jobs:
                       docker rmi frontend-image || true &&
                       docker load -i /techcommerce/docker-images/frontend-image.tar.gz &&
                       docker run --name frontend-container \
-                      -p 80:3000 \
+                      -p 3000:3000 \
                       frontend-image

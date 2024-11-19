@@ -3,12 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"prepare": "copy .husky\\pre-commit ..\\.git\\hooks\\pre-commit",
 		"dev": "npx openapi-typescript http://localhost:8080/v1/api-docs -o ./.swagger/v1/api-docs.d.ts && next dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"format": "prettier --write .",
-		"prepare": "copy .husky\\pre-commit ..\\.git\\hooks\\pre-commit"
+		"format": "prettier --write ."
 	},
 	"lint-staged": {
 		"src/**/*.{js,ts,jsx,tsx}": [

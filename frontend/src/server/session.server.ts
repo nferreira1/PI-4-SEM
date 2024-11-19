@@ -35,11 +35,15 @@ export async function verifySession() {
 			return;
 		}
 
-		const { data } = await api.GET("/cliente/me", {
+		const { data, error } = await api.GET("/cliente/me", {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
 		});
+
+		if (error) {
+			return;
+		}
 
 		return { cliente: data, token: token };
 	} catch {

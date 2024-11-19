@@ -1,9 +1,8 @@
 "use client";
 
-import { singin } from "@/app/login/actions";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 export const AuthContext = createContext<
 	Readonly<{
@@ -41,10 +40,6 @@ export function AuthProvider({
 		router.push("/login");
 		setLoading(false);
 	};
-
-	useEffect(() => {
-		console.log("teste");
-	}, [singin]);
 
 	return (
 		<AuthContext.Provider

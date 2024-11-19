@@ -28,7 +28,7 @@ export function Form({
 	const [state, action, isPending] = useActionState(singup, null);
 
 	return (
-		<form className="grid place-items-center space-y-4" action={action}>
+		<form className="grid place-items-center gap-y-4" action={action}>
 			<div className="grid gap-2 pb-4 text-center">
 				<h1 className="text-3xl font-bold">Criar conta</h1>
 				<p className="text-balance text-muted-foreground">

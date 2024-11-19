@@ -21,7 +21,7 @@ public class ClienteDTO {
     private String cpf;
     private String telefone;
     private boolean recebeOfertas;
-    private List<EnderecoDTO> endereco = new ArrayList<EnderecoDTO>();
+    private List<EnderecoDTO> enderecos = new ArrayList<EnderecoDTO>();
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private String senha;

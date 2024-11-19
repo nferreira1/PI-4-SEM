@@ -45,7 +45,17 @@ public class ModelMapperConfig {
                     mapper.using(generoConverter).map(ClienteDTO::getGeneroId, ClienteEntity::setGeneroEntity);
                     mapper.using(emailToLowerConverter).map(ClienteDTO::getEmail, ClienteEntity::setEmail);
                     mapper.skip(ClienteEntity::setId);
+                    mapper.map(ClienteDTO::getEnderecos, ClienteEntity::setEnderecos);
                 });
+
+        // Garantir associação de cliente em endereços após o mapeamento
+        modelMapper.typeMap(ClienteDTO.class, ClienteEntity.class).setPostConverter(context -> {
+            ClienteEntity cliente = context.getDestination();
+            if (cliente.getEnderecos() != null) {
+                cliente.getEnderecos().forEach(endereco -> endereco.setClienteEntity(cliente));
+            }
+            return cliente;
+        });
 
         // Mapeamento de CarrinhoProdutosEntity para CarrinhoProdutosDTO
         modelMapper.typeMap(CarrinhoProdutosEntity.class, CarrinhoProdutosRequestDTO.class)

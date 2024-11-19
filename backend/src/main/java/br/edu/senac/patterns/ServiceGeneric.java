@@ -1,6 +1,8 @@
 package br.edu.senac.patterns;
 
 import br.edu.senac.exceptions.ErrorResponseException;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 
@@ -9,6 +11,9 @@ import java.util.List;
 public abstract class ServiceGeneric<T, U> implements IServiceGeneric<T, U> {
 
     private final JpaRepository<T, U> repository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public ServiceGeneric(JpaRepository<T, U> repository) {
         this.repository = repository;
@@ -35,8 +40,9 @@ public abstract class ServiceGeneric<T, U> implements IServiceGeneric<T, U> {
 
     @Override
     public T update(U id, T object) {
-        this.findById(id);
-        return this.repository.save(object);
+        T existingObject = this.findById(id);
+        modelMapper.map(object, existingObject);
+        return this.repository.save(existingObject);
     }
 
     @Override

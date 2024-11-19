@@ -47,6 +47,7 @@ jobs:
                         -e SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }} \
                         -e DIRECTORY_SERVER_IMAGES=${{ secrets.DIRECTORY_SERVER_IMAGES }} \
                         -e VM_IP=${{ secrets.VM_IP }} \
+                        -e SPRING_PROFILES_ACTIVE=prod \
                         --name backend-container backend-image
 
             # ----- Buildar, Transferir e Deploy do Frontend -----

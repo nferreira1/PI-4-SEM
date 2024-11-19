@@ -1,6 +1,5 @@
 package br.edu.senac.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +21,11 @@ public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    @Size(min = 3, message = "O nome do endereço tem que ter no mínimo 3 caracteres.")
+    @NotBlank(message = "O nome do endereço não pode ser nulo e nem vazio.")
+    private String nomeEndereco;
 
     @Column(nullable = false)
     @NotNull(message = "O endereço principal não pode ser nulo.")

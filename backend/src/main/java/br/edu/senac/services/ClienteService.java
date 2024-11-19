@@ -33,11 +33,8 @@ public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
         carrinho.setClienteEntity(cliente);
         cliente.setCarrinhoEntity(carrinho);
 
-        if (!object.getEnderecoEntities().isEmpty()) {
-            object.getEnderecoEntities().forEach(endereco -> {
-                endereco.setClienteEntity(cliente);
-                this.enderecoService.insert(endereco);
-            });
+        if (!object.getEnderecos().isEmpty()) {
+            object.getEnderecos().forEach(endereco -> endereco.setClienteEntity(object));
         }
 
         return cliente;

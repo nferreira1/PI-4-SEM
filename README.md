@@ -81,7 +81,7 @@ Agora você já pode rodar o programa no Visual Studio Code 😊.
   sudo mkdir -p /techcommerce/docker-images
 - Ajuste as permissões dessa pasta para permitir que qualquer usuário do sistema possa ler, escrever e executar arquivos dentro dela.
   ```bash
-  sudo chmod 777 /techcommerce
+  sudo chmod -R 777 /techcommerce
 - Instale o [Docker](https://www.docker.com/), você pode seguir o passo a passo pela documentação no [site oficial](https://docs.docker.com/engine/install/ubuntu/);
   - Crie um banco de dados PostgreSQL, o usuário e senha devem ser iguais as variáveis `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD`:
     ```bash

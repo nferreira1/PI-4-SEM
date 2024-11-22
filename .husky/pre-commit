@@ -4,43 +4,56 @@ set -e
 
 echo "Executando pre-commit hook..."
 
-# Identificar arquivos staged no backend
+# Backend: Identificar e corrigir arquivos Java staged
 echo "Identificando arquivos staged no backend..."
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E "^backend/.*\.java$")
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E "^backend/.*\.java$" || true)
+
+echo "Arquivos identificados no backend: $STAGED_FILES"
 
 if [ -n "$STAGED_FILES" ]; then
   echo "Corrigindo arquivos staged no backend com Spotless..."
-  
-  # Ir para o diretório backend
-  cd backend
 
-   ./mvnw.cmd install
+  # Ir para o diretório backend
+  cd backend || { echo "Falha ao entrar no diretório backend"; exit 1; }
+
+  # Instalar dependências
+  echo "Instalando dependências do Maven..."
+  ./mvnw.cmd install || { echo "Falha ao instalar dependências"; exit 1; }
 
   # Iterar sobre os arquivos staged e aplicar Spotless
   for FILE in $STAGED_FILES; do
-    # Remover o prefixo 'backend/' do caminho para uso no Spotless
     RELATIVE_PATH=${FILE#backend/}
     echo "Corrigindo arquivo: $RELATIVE_PATH"
-    
-    # Executar o Spotless no arquivo específico
-    ./mvnw.cmd com.diffplug.spotless:spotless-maven-plugin:2.39.0:apply -DspotlessFiles="$RELATIVE_PATH"
-
-    # Voltar para o diretório raiz para adicionar o arquivo corrigido
-    cd ..
+    ./mvnw.cmd com.diffplug.spotless:spotless-maven-plugin:2.39.0:apply -DspotlessFiles="$RELATIVE_PATH" || {
+      echo "Falha ao corrigir arquivo: $RELATIVE_PATH";
+      exit 1;
+    }
     git add "$FILE"
-    cd backend
   done
 
-  echo "Arquivos corrigidos e adicionados novamente ao commit."
+  cd ..
+  echo "Arquivos corrigidos e adicionados novamente ao commit no backend."
 else
   echo "Nenhum arquivo Java staged no backend para corrigir."
 fi
 
-# Frontend: rodar lint-staged para validar apenas arquivos staged no frontend
+# Sempre executar o frontend
 echo "Validando arquivos staged no frontend..."
-cd ../frontend
-npm i --force
-npx lint-staged
+cd frontend || { echo "Falha ao entrar no diretório frontend"; exit 1; }
 
-# Commit finalizado
+# Instalar dependências (ignorar mensagens de erro se já estiverem instaladas)
+echo "Instalando dependências do frontend..."
+npm install --force || { echo "Falha ao instalar dependências do frontend"; exit 1; }
+
+# Executar lint-staged mesmo que não haja arquivos staged
+echo "Executando lint-staged..."
+if ! npx lint-staged; then
+  echo "Erro ao validar arquivos no frontend."
+  exit 1
+fi
+
+cd ..
+echo "Frontend validado com sucesso."
+
+# Finalizando hook
 echo "Pre-commit hook finalizado com sucesso."

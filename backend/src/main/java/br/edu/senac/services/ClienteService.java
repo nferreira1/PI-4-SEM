@@ -4,7 +4,6 @@ import br.edu.senac.entity.CarrinhoEntity;
 import br.edu.senac.entity.ClienteEntity;
 import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.ClienteRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
 
   @Autowired private ClienteRepository clienteRepository;
-
-  @Autowired private EnderecoService enderecoService;
-
-  @Autowired private ModelMapper modelMapper;
 
   public ClienteService(JpaRepository<ClienteEntity, Long> repository) {
     super(repository);

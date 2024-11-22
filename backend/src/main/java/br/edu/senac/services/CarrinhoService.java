@@ -14,6 +14,8 @@ import br.edu.senac.patterns.ServiceGeneric;
 import br.edu.senac.repositories.CarrinhoRepository;
 import br.edu.senac.repositories.ClienteRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,142 +23,155 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class CarrinhoService extends ServiceGeneric<CarrinhoEntity, Long> implements ICarrinho {
 
-    @Autowired
-    private CarrinhoRepository carrinhoRepository;
+  @Autowired private CarrinhoRepository carrinhoRepository;
 
-    @Autowired
-    private ProdutoService produtoService;
+  @Autowired private ProdutoService produtoService;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+  @Autowired private ClienteRepository clienteRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public CarrinhoService(JpaRepository<CarrinhoEntity, Long> repository) {
-        super(repository);
-    }
+  public CarrinhoService(JpaRepository<CarrinhoEntity, Long> repository) {
+    super(repository);
+  }
 
-    public CarrinhoDTO findByCliente(ClienteEntity cliente) {
-        var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
+  public CarrinhoDTO findByCliente(ClienteEntity cliente) {
+    var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
 
-        CarrinhoDTO carrinhoDTO = new CarrinhoDTO();
-        carrinhoDTO.setId(carrinho.getId());
-        carrinhoDTO.setCliente(this.modelMapper.map(cliente, ClienteDTO.class));
+    CarrinhoDTO carrinhoDTO = new CarrinhoDTO();
+    carrinhoDTO.setId(carrinho.getId());
+    carrinhoDTO.setCliente(this.modelMapper.map(cliente, ClienteDTO.class));
 
-        List<CarrinhoProdutosResponseDTO> itens = carrinho.getItens().stream()
-                .filter(item -> item.getProduto().getEstoque() >= item.getQuantidade())
-                .map(item -> {
-                    CarrinhoProdutosResponseDTO dto = new CarrinhoProdutosResponseDTO();
-                    dto.setId(item.getId());
-                    dto.setProduto(this.modelMapper.map(item.getProduto(), ProdutoDTO.class));
-                    dto.setQuantidade(item.getQuantidade());
-                    return dto;
+    List<CarrinhoProdutosResponseDTO> itens =
+        carrinho.getItens().stream()
+            .filter(item -> item.getProduto().getEstoque() >= item.getQuantidade())
+            .map(
+                item -> {
+                  CarrinhoProdutosResponseDTO dto = new CarrinhoProdutosResponseDTO();
+                  dto.setId(item.getId());
+                  dto.setProduto(this.modelMapper.map(item.getProduto(), ProdutoDTO.class));
+                  dto.setQuantidade(item.getQuantidade());
+                  return dto;
                 })
-                .toList();
+            .toList();
 
-        carrinhoDTO.setItens(itens);
+    carrinhoDTO.setItens(itens);
 
-        return carrinhoDTO;
+    return carrinhoDTO;
+  }
+
+  @Transactional
+  public CarrinhoEntity insert(Long clienteId, Long produtoId, int quantidade) {
+    var produto = this.produtoService.findById(produtoId);
+
+    if (produto.getEstoque() < quantidade) {
+      throw new ErrorResponseException(
+          HttpStatus.BAD_REQUEST,
+          "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
     }
 
-    @Transactional
-    public CarrinhoEntity insert(Long clienteId, Long produtoId, int quantidade) {
-        var produto = this.produtoService.findById(produtoId);
-
-        if (produto.getEstoque() < quantidade) {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST,
-                    "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
-        }
-
-        if (quantidade <= 0) {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "A quantidade deve ser maior do que zero.");
-        }
-
-        var cliente = this.clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
-
-        var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
-
-        carrinho.getItens().forEach(item -> {
-            if ((item.getQuantidade() + quantidade) > item.getProduto().getEstoque()) {
-                throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
-            }
-        });
-
-        var itemExistente = carrinho.getItens().stream()
-                .filter(item -> item.getProduto().equals(produto))
-                .findFirst();
-
-        if (itemExistente.isPresent()) {
-            CarrinhoProdutosEntity carrinhoProduto = itemExistente.get();
-            carrinhoProduto.setQuantidade(carrinhoProduto.getQuantidade() + quantidade);
-        } else {
-            var novoItem = new CarrinhoProdutosEntity();
-            novoItem.setCarrinho(carrinho);
-            novoItem.setProduto(produto);
-            novoItem.setQuantidade(quantidade);
-            carrinho.getItens().add(novoItem);
-        }
-
-        return this.carrinhoRepository.save(carrinho);
+    if (quantidade <= 0) {
+      throw new ErrorResponseException(
+          HttpStatus.BAD_REQUEST, "A quantidade deve ser maior do que zero.");
     }
 
-    @Transactional
-    public CarrinhoEntity update(Long clienteId, Long produtoId, int quantidade) {
-        var produto = this.produtoService.findById(produtoId);
+    var cliente =
+        this.clienteRepository
+            .findById(clienteId)
+            .orElseThrow(
+                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 
-        if (produto.getEstoque() < quantidade) {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST,
-                    "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
-        }
+    var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
 
-        var cliente = this.clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+    carrinho
+        .getItens()
+        .forEach(
+            item -> {
+              if ((item.getQuantidade() + quantidade) > item.getProduto().getEstoque()) {
+                throw new ErrorResponseException(
+                    HttpStatus.BAD_REQUEST,
+                    "A quantidade máxima em estoque para este produto é de "
+                        + produto.getEstoque()
+                        + ".");
+              }
+            });
 
-        var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
+    var itemExistente =
+        carrinho.getItens().stream().filter(item -> item.getProduto().equals(produto)).findFirst();
 
-        var itemExistente = carrinho.getItens().stream()
-                .filter(item -> item.getProduto().equals(produto))
-                .findFirst();
-
-        if (itemExistente.isPresent()) {
-            CarrinhoProdutosEntity carrinhoProduto = itemExistente.get();
-
-            if (quantidade == 0) {
-                carrinho.getItens().remove(carrinhoProduto);
-            } else {
-                carrinhoProduto.setQuantidade(quantidade);
-            }
-        } else {
-            throw new ErrorResponseException(HttpStatus.BAD_REQUEST, "Este produto não existe no carrinho.");
-        }
-
-        return this.carrinhoRepository.save(carrinho);
+    if (itemExistente.isPresent()) {
+      CarrinhoProdutosEntity carrinhoProduto = itemExistente.get();
+      carrinhoProduto.setQuantidade(carrinhoProduto.getQuantidade() + quantidade);
+    } else {
+      var novoItem = new CarrinhoProdutosEntity();
+      novoItem.setCarrinho(carrinho);
+      novoItem.setProduto(produto);
+      novoItem.setQuantidade(quantidade);
+      carrinho.getItens().add(novoItem);
     }
 
-    @Override
-    public List<ProdutoEntity> carregarProdutosDoCarrinho(Long IdCarrinho) {
-        CarrinhoEntity carrinho = findById(IdCarrinho);
+    return this.carrinhoRepository.save(carrinho);
+  }
 
-        if (carrinho == null) {
-            new EntityNotFoundException("Carrinho não encontrado");
-        }
+  @Transactional
+  public CarrinhoEntity update(Long clienteId, Long produtoId, int quantidade) {
+    var produto = this.produtoService.findById(produtoId);
 
-        List<ProdutoEntity> listProdutos = new ArrayList<>();
-        carrinho.getItens().forEach(carrinhoProduto -> listProdutos.add(produtoService.findById(carrinhoProduto.getProduto().getId())));
-
-        if (listProdutos.isEmpty()) {
-            new ArrayList<>();
-        }
-
-        return listProdutos;
+    if (produto.getEstoque() < quantidade) {
+      throw new ErrorResponseException(
+          HttpStatus.BAD_REQUEST,
+          "A quantidade máxima em estoque para este produto é de " + produto.getEstoque() + ".");
     }
 
+    var cliente =
+        this.clienteRepository
+            .findById(clienteId)
+            .orElseThrow(
+                () -> new ErrorResponseException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+
+    var carrinho = this.carrinhoRepository.findByClienteEntity(cliente);
+
+    var itemExistente =
+        carrinho.getItens().stream().filter(item -> item.getProduto().equals(produto)).findFirst();
+
+    if (itemExistente.isPresent()) {
+      CarrinhoProdutosEntity carrinhoProduto = itemExistente.get();
+
+      if (quantidade == 0) {
+        carrinho.getItens().remove(carrinhoProduto);
+      } else {
+        carrinhoProduto.setQuantidade(quantidade);
+      }
+    } else {
+      throw new ErrorResponseException(
+          HttpStatus.BAD_REQUEST, "Este produto não existe no carrinho.");
+    }
+
+    return this.carrinhoRepository.save(carrinho);
+  }
+
+  @Override
+  public List<ProdutoEntity> carregarProdutosDoCarrinho(Long IdCarrinho) {
+    CarrinhoEntity carrinho = findById(IdCarrinho);
+
+    if (carrinho == null) {
+      new EntityNotFoundException("Carrinho não encontrado");
+    }
+
+    List<ProdutoEntity> listProdutos = new ArrayList<>();
+    carrinho
+        .getItens()
+        .forEach(
+            carrinhoProduto ->
+                listProdutos.add(produtoService.findById(carrinhoProduto.getProduto().getId())));
+
+    if (listProdutos.isEmpty()) {
+      new ArrayList<>();
+    }
+
+    return listProdutos;
+  }
 }

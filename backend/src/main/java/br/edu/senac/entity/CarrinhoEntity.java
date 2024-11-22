@@ -1,13 +1,12 @@
 package br.edu.senac.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Table(name = "carrinhos")
 @Entity(name = "Carrinho")
@@ -17,15 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 public class CarrinhoEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
-    private ClienteEntity clienteEntity;
+  @OneToOne
+  @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+  private ClienteEntity clienteEntity;
 
-    @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarrinhoProdutosEntity> itens = new ArrayList<CarrinhoProdutosEntity>();
-
+  @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CarrinhoProdutosEntity> itens = new ArrayList<CarrinhoProdutosEntity>();
 }

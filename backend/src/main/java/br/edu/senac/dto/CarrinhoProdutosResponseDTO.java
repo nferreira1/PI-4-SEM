@@ -12,13 +12,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"id"}, allowGetters = true)
+@JsonIgnoreProperties(
+    value = {"id"},
+    allowGetters = true)
 public class CarrinhoProdutosResponseDTO {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Long id;
-    private ProdutoDTO produto;
-    private int quantidade;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+  private Long id;
 
+  private ProdutoDTO produto;
+  private int quantidade;
 }

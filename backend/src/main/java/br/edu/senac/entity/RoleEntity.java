@@ -14,23 +14,22 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoleEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String nome;
+  @Column(nullable = false, unique = true)
+  private String nome;
 
-    @Getter
-    public enum Values {
-        CLIENTE(1L),
-        ADMIN(2L);
+  @Getter
+  public enum Values {
+    CLIENTE(1L),
+    ADMIN(2L);
 
-        private final Long id;
+    private final Long id;
 
-        Values(Long id) {
-            this.id = id;
-        }
+    Values(Long id) {
+      this.id = id;
     }
-
+  }
 }

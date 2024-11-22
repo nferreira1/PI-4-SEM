@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GeneroService extends ServiceGeneric<GeneroEntity, Long> {
 
-    public GeneroService(JpaRepository<GeneroEntity, Long> repository) {
-        super(repository);
-    }
-
+  public GeneroService(JpaRepository<GeneroEntity, Long> repository) {
+    super(repository);
+  }
 }

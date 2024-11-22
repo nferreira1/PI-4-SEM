@@ -14,19 +14,18 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CarrinhoProdutosEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "carrinho_id")
-    private CarrinhoEntity carrinho;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "carrinho_id")
+  private CarrinhoEntity carrinho;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produto_id")
-    private ProdutoEntity produto;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "produto_id")
+  private ProdutoEntity produto;
 
-    @Column(nullable = false)
-    private int quantidade;
-
+  @Column(nullable = false)
+  private int quantidade;
 }

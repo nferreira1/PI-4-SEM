@@ -1,0 +1,46 @@
+#!/bin/sh
+# Fail on error
+set -e
+
+echo "Executando pre-commit hook..."
+
+# Identificar arquivos staged no backend
+echo "Identificando arquivos staged no backend..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E "^backend/.*\.java$")
+
+if [ -n "$STAGED_FILES" ]; then
+  echo "Corrigindo arquivos staged no backend com Spotless..."
+  
+  # Ir para o diretório backend
+  cd backend
+
+   ./mvnw.cmd install
+
+  # Iterar sobre os arquivos staged e aplicar Spotless
+  for FILE in $STAGED_FILES; do
+    # Remover o prefixo 'backend/' do caminho para uso no Spotless
+    RELATIVE_PATH=${FILE#backend/}
+    echo "Corrigindo arquivo: $RELATIVE_PATH"
+    
+    # Executar o Spotless no arquivo específico
+    ./mvnw.cmd com.diffplug.spotless:spotless-maven-plugin:2.39.0:apply -DspotlessFiles="$RELATIVE_PATH"
+
+    # Voltar para o diretório raiz para adicionar o arquivo corrigido
+    cd ..
+    git add "$FILE"
+    cd backend
+  done
+
+  echo "Arquivos corrigidos e adicionados novamente ao commit."
+else
+  echo "Nenhum arquivo Java staged no backend para corrigir."
+fi
+
+# Frontend: rodar lint-staged para validar apenas arquivos staged no frontend
+echo "Validando arquivos staged no frontend..."
+cd ../frontend
+npm i --force
+npx lint-staged
+
+# Commit finalizado
+echo "Pre-commit hook finalizado com sucesso."

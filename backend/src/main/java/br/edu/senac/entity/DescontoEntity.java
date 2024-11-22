@@ -16,13 +16,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DescontoEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false)
-    @Positive(message = "O valor deve ser positivo.")
-    @DecimalMin(value = "1.00", message = "O valor deve ser no mínimo R$ 1,00 ou 1,00%.")
-    private double valor;
-
+  @Column(nullable = false)
+  @Positive(message = "O valor deve ser positivo.")
+  @DecimalMin(value = "1.00", message = "O valor deve ser no mínimo R$ 1,00 ou 1,00%.")
+  private double valor;
 }

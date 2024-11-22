@@ -13,38 +13,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ClienteService extends ServiceGeneric<ClienteEntity, Long> {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+  @Autowired private ClienteRepository clienteRepository;
 
-    @Autowired
-    private EnderecoService enderecoService;
+  @Autowired private EnderecoService enderecoService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    public ClienteService(JpaRepository<ClienteEntity, Long> repository) {
-        super(repository);
+  public ClienteService(JpaRepository<ClienteEntity, Long> repository) {
+    super(repository);
+  }
+
+  @Override
+  public ClienteEntity insert(ClienteEntity object) {
+    var cliente = this.clienteRepository.save(object);
+    var carrinho = new CarrinhoEntity();
+    carrinho.setClienteEntity(cliente);
+    cliente.setCarrinhoEntity(carrinho);
+
+    if (!object.getEnderecos().isEmpty()) {
+      object.getEnderecos().forEach(endereco -> endereco.setClienteEntity(object));
     }
 
-    @Override
-    public ClienteEntity insert(ClienteEntity object) {
-        var cliente = this.clienteRepository.save(object);
-        var carrinho = new CarrinhoEntity();
-        carrinho.setClienteEntity(cliente);
-        cliente.setCarrinhoEntity(carrinho);
+    return cliente;
+  }
 
-        if (!object.getEnderecos().isEmpty()) {
-            object.getEnderecos().forEach(endereco -> endereco.setClienteEntity(object));
-        }
-
-        return cliente;
-    }
-
-    @Transactional
-    public ClienteEntity update(Long id) {
-        var cliente = this.findById(id);
-        cliente.setStatus(!cliente.isStatus());
-        return cliente;
-    }
-
+  @Transactional
+  public ClienteEntity update(Long id) {
+    var cliente = this.findById(id);
+    cliente.setStatus(!cliente.isStatus());
+    return cliente;
+  }
 }

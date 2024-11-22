@@ -9,13 +9,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PedidoRepository extends JpaRepository<PedidoEntity, Long> {
 
-    @Query(value = "CALL SPU_GERARPEDIDOS(:nome, :descricao, :quantidade, :valor, :idPedido, :idProduto)", nativeQuery = true)
-    void gerarPedidoItem(
-            @Param("nome") String nome,
-            @Param("descricao") String descricao,
-            @Param("quantidade") int quantidade,
-            @Param("valor") double valor,
-            @Param("idPedido") Long idPedido,
-            @Param("idProduto") Long idProduto
-    );
+  @Query(
+      value =
+          "CALL SPU_GERARPEDIDOS(:nome, :descricao, :quantidade, :valor, :idPedido, :idProduto)",
+      nativeQuery = true)
+  void gerarPedidoItem(
+      @Param("nome") String nome,
+      @Param("descricao") String descricao,
+      @Param("quantidade") int quantidade,
+      @Param("valor") double valor,
+      @Param("idPedido") Long idPedido,
+      @Param("idProduto") Long idProduto);
 }

@@ -11,18 +11,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    @Bean
-    public OpenAPI swagger() {
-        return new OpenAPI()
-                .info(new Info().title("TechCommerce API")
+  @Bean
+  public OpenAPI swagger() {
+    return new OpenAPI()
+        .info(
+            new Info()
+                .title("TechCommerce API")
                 .version("1.0")
                 .description("API para o sistema de e-commerce TechCommerce."))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new io.swagger.v3.oas.models.Components()
-                .addSecuritySchemes("bearerAuth", new SecurityScheme()
-                .name("bearerAuth")
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("JWT")));
-    }
+        .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+        .components(
+            new io.swagger.v3.oas.models.Components()
+                .addSecuritySchemes(
+                    "bearerAuth",
+                    new SecurityScheme()
+                        .name("bearerAuth")
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")));
+  }
 }

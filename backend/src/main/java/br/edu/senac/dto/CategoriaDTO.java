@@ -12,14 +12,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"id"}, allowGetters = true)
+@JsonIgnoreProperties(
+    value = {"id"},
+    allowGetters = true)
 public class CategoriaDTO {
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Long id;
-    private String nome;
-    private boolean status;
-    private String imagem;
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+  private Long id;
 
+  private String nome;
+  private boolean status;
+  private String imagem;
 }

@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PagamentoService extends ServiceGeneric<PagamentoEntity, Long> {
 
-    public PagamentoService(JpaRepository<PagamentoEntity, Long> repository) {
-        super(repository);
-    }
-
+  public PagamentoService(JpaRepository<PagamentoEntity, Long> repository) {
+    super(repository);
+  }
 }

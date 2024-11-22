@@ -23,63 +23,85 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasRole('CLIENTE')")
 public class CarrinhoController {
 
-    @Autowired
-    private ClienteService clienteService;
+  @Autowired private ClienteService clienteService;
 
-    @Autowired
-    private CarrinhoService carrinhoService;
+  @Autowired private CarrinhoService carrinhoService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    @GetMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-    })
-    @PreAuthorize("hasAuthority('CLIENTE')")
-    public ResponseEntity<CarrinhoDTO> getByCliente(JwtAuthenticationToken jwtAuthenticationToken) {
-        var cliente = this.clienteService.findById(Long.valueOf(jwtAuthenticationToken.getToken().getSubject()));
-        var carrinho = this.carrinhoService.findByCliente(cliente);
-        return ResponseEntity.ok().body(carrinho);
-    }
+  @GetMapping
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(
+            responseCode = "401",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+        @ApiResponse(
+            responseCode = "403",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+        @ApiResponse(
+            responseCode = "500",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+      })
+  @PreAuthorize("hasAuthority('CLIENTE')")
+  public ResponseEntity<CarrinhoDTO> getByCliente(JwtAuthenticationToken jwtAuthenticationToken) {
+    var cliente =
+        this.clienteService.findById(Long.valueOf(jwtAuthenticationToken.getToken().getSubject()));
+    var carrinho = this.carrinhoService.findByCliente(cliente);
+    return ResponseEntity.ok().body(carrinho);
+  }
 
-    @PostMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201"),
-            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-    })
-    @PreAuthorize("hasAuthority('CLIENTE')")
-    public ResponseEntity<CarrinhoDTO> post(@RequestBody CarrinhoProdutosRequestDTO object, JwtAuthenticationToken jwtAuthenticationToken) {
-        var carrinhoRequest = this.carrinhoService.insert(
-                Long.valueOf(jwtAuthenticationToken.getToken().getSubject()),
-                object.getProdutoId(),
-                object.getQuantidade()
-        );
-        var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoDTO.class);
-        return ResponseEntity.ok().body(carrinhoResponse);
-    }
+  @PostMapping
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "201"),
+        @ApiResponse(
+            responseCode = "401",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+        @ApiResponse(
+            responseCode = "403",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+        @ApiResponse(
+            responseCode = "500",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+      })
+  @PreAuthorize("hasAuthority('CLIENTE')")
+  public ResponseEntity<CarrinhoDTO> post(
+      @RequestBody CarrinhoProdutosRequestDTO object,
+      JwtAuthenticationToken jwtAuthenticationToken) {
+    var carrinhoRequest =
+        this.carrinhoService.insert(
+            Long.valueOf(jwtAuthenticationToken.getToken().getSubject()),
+            object.getProdutoId(),
+            object.getQuantidade());
+    var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoDTO.class);
+    return ResponseEntity.ok().body(carrinhoResponse);
+  }
 
-    @PatchMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "401", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-            @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
-    })
-    @PreAuthorize("hasAuthority('CLIENTE')")
-    public ResponseEntity<CarrinhoDTO> patch(@RequestBody CarrinhoProdutosRequestDTO object, JwtAuthenticationToken jwtAuthenticationToken) {
-        var carrinhoRequest = this.carrinhoService.update(
-                Long.valueOf(jwtAuthenticationToken.getToken().getSubject()),
-                object.getProdutoId(),
-                object.getQuantidade()
-        );
-        var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoDTO.class);
-        return ResponseEntity.ok().body(carrinhoResponse);
-    }
-
+  @PatchMapping
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200"),
+        @ApiResponse(
+            responseCode = "401",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+        @ApiResponse(
+            responseCode = "403",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+        @ApiResponse(
+            responseCode = "500",
+            content = @Content(schema = @Schema(implementation = ErrorResponseException.class))),
+      })
+  @PreAuthorize("hasAuthority('CLIENTE')")
+  public ResponseEntity<CarrinhoDTO> patch(
+      @RequestBody CarrinhoProdutosRequestDTO object,
+      JwtAuthenticationToken jwtAuthenticationToken) {
+    var carrinhoRequest =
+        this.carrinhoService.update(
+            Long.valueOf(jwtAuthenticationToken.getToken().getSubject()),
+            object.getProdutoId(),
+            object.getQuantidade());
+    var carrinhoResponse = this.modelMapper.map(carrinhoRequest, CarrinhoDTO.class);
+    return ResponseEntity.ok().body(carrinhoResponse);
+  }
 }

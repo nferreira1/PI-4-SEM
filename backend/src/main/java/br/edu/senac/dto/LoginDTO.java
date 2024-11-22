@@ -1,6 +1,5 @@
 package br.edu.senac.dto;
 
-
 import br.edu.senac.entity.ClienteEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,11 +15,11 @@ import lombok.Setter;
 @Setter
 public class LoginDTO {
 
-    private String email;
-    private String senha;
-    @JsonIgnore
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private ClienteEntity cliente;
+  private String email;
+  private String senha;
 
+  @JsonIgnore
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+  private ClienteEntity cliente;
 }
